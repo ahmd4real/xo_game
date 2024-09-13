@@ -30,13 +30,13 @@ class LevelsButton extends StatelessWidget {
 
         left: 0,
         child: Container(
-          height: 32,
-          width: 32,
+          height: 64,
+          width: 64,
           
           decoration: const BoxDecoration(
             shape: BoxShape.circle,
               color: Colors.white, 
-              //borderRadius: BorderRadius.circular(16)
+             
               ),
         ),
       )

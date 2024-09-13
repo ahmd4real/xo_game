@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/view/screens/game_page.dart';
 import 'package:xo_game/view/screens/levels_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
 
@@ -29,9 +30,9 @@ class HomePage extends StatelessWidget {
               text: options[j],
               onTap: j==0?(){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const LevelsPage()));
-              }:(){
-                
-              },
+              }:j==1?(){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const GamePage()));
+              }:(){}
             ),
           ),
         ]

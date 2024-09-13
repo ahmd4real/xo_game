@@ -16,3 +16,7 @@ Color kPurple=const Color(0xffbd2ae7);
 Color kRed=const Color(0xffff4880);
 Color kOrange=const Color(0xffff9332);
 
+Color kDarkPurple=const Color(0xff2c2056);
+
+//strings
+const String kAvatar='assets/images/avatar.png';
