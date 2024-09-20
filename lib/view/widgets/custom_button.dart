@@ -19,7 +19,8 @@ class CustomButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(16),
+           // border: Border.all(width: 3,color: kBlue),
             gradient: LinearGradient(colors: [color1, color2])),
         child: Center(
           child: Text(

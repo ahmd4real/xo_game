@@ -20,3 +20,11 @@ Color kDarkPurple=const Color(0xff2c2056);
 
 //strings
 const String kAvatar='assets/images/avatar.png';
+const String winnerBack='assets/images/winner_back.png';
+const String loserBack='assets/images/loser_back.png';
+const String drawBack='assets/images/draw_back.png';
+const String winnerWord='assets/images/winner_word.png';
+
+
+//audios
+const String pressSound='sounds/mixkit-modern-technology-select-3124.wav';

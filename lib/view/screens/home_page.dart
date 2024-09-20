@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
-import 'package:xo_game/view/screens/game_page.dart';
+import 'package:xo_game/view/screens/enter_teams_page.dart';
 import 'package:xo_game/view/screens/levels_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
 
 class HomePage extends StatelessWidget {
    HomePage({super.key});
-  List <Color>colors=[kGreen,kBlue,kRed,kOrange,kPink,kPurple,];
+  List <Color>colors=[kBlue,kGreen,kRed,kOrange,kPink,kPurple,];
   List<String>options=["Single Player","Offline Multi Player","Online Multi Player"];
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               onTap: j==0?(){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> const LevelsPage()));
               }:j==1?(){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> const GamePage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>  EnterTeamsPage()));
               }:(){}
             ),
           ),
