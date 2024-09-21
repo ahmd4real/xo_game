@@ -24,6 +24,12 @@ const String winnerBack='assets/images/winner_back.png';
 const String loserBack='assets/images/loser_back.png';
 const String drawBack='assets/images/draw_back.png';
 const String winnerWord='assets/images/winner_word.png';
+const String x='assets/images/x.png';
+const String o='assets/images/o.png';
+const String font='SpenbebGame';
+
+//urls
+const String baseUrl='https://xogame.runasp.net/api/Accounts';
 
 
 //audios

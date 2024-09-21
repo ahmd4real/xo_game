@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/utilities.dart';
 
 class BoardSq extends StatelessWidget {
   final String symbol;
@@ -34,16 +34,7 @@ class BoardSq extends StatelessWidget {
             top: top ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
           ),
         ),
-        child: Center(
-          child: Text(
-            symbol,
-            style: const TextStyle(
-              color: Colors.amber,
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        child: symbolWidget(symbol,70)
       ),
     );
   }

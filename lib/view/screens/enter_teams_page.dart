@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/game_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
 import 'package:xo_game/view/widgets/custom_form_field.dart';
@@ -20,7 +21,9 @@ class EnterTeamsPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: ListView(children: [
-          SizedBox(height: MediaQuery.sizeOf(context).height / 3),
+          titleWidget(context),
+           const SizedBox(height: 32),
+          //SizedBox(height: MediaQuery.sizeOf(context).height / 3),
           CustomTextFormField(
             hidden: false,
             controller: p1,

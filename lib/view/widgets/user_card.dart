@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/utilities.dart';
 
 class UserCard extends StatelessWidget {
   const UserCard({
@@ -7,37 +8,44 @@ class UserCard extends StatelessWidget {
     this.avatar,
     required this.userName,
     required this.symbol,
-    required this.isActive, // Add this property
+    required this.isActive, 
   });
 
   final String? avatar;
   final String userName, symbol;
-  final bool isActive; // Indicates if it's the current user's turn
+  final bool isActive; 
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width / 2.5,
       height: MediaQuery.sizeOf(context).height / 4,
+
       decoration: BoxDecoration(
         color: kDarkPurple,
         border: Border.all(
           color: isActive
               ? Colors.amber.shade200
-              : Colors.amber, // Change color based on isActive
-          width: isActive ? 4 : 2, // Thicker border if active
+              : Colors.amber, 
+          width: isActive ? 4 : 1, 
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: isActive
             ? [
                 BoxShadow(
                   color: Colors.amber.withOpacity(0.5),
+                  spreadRadius: 4,
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+                BoxShadow(
+                  color: Colors.purple.withOpacity(0.5),
                   spreadRadius: 3,
                   blurRadius: 10,
-                  offset: const Offset(0, 3), // Add a shadow effect when active
+                  offset: const Offset(0, 3),
                 ),
               ]
-            : null, // No shadow if not active
+            : null, 
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -48,13 +56,13 @@ class UserCard extends StatelessWidget {
           ),
           Text(
             userName,
-            
-            style: const TextStyle(color: Colors.amber,fontSize: 18,fontWeight: FontWeight.w600),
+            style: const TextStyle(
+                fontFamily: font,
+                color: Colors.amber,
+                fontSize: 18,
+                fontWeight: FontWeight.w600),
           ),
-          Text(
-            symbol,
-            style: const TextStyle(color: Colors.amber),
-          ),
+          symbolWidget(symbol,24),
         ],
       ),
     );

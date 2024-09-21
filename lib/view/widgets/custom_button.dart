@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xo_game/constants.dart';
 
 class CustomButton extends StatelessWidget {
    CustomButton(
@@ -20,15 +21,16 @@ class CustomButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-           // border: Border.all(width: 3,color: kBlue),
+          
             gradient: LinearGradient(colors: [color1, color2])),
         child: Center(
           child: Text(
                 textAlign: TextAlign.center,
             text,
             style: const TextStyle(
+              fontFamily: font,
             
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 24),
           ),
         ),
       ),

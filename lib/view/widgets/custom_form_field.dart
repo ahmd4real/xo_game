@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
 
@@ -47,9 +46,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-     
       style: const TextStyle(
-          color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+        fontFamily: font,
+        color: Colors.white,
+        fontSize: 20,
+      ),
       obscureText: isHidden,
       validator: widget.validator ??
           (value) {
@@ -58,7 +59,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             }
             return null;
           },
-          
       cursorColor: kBlue,
       keyboardType: widget.keyboardType,
       controller: widget.controller,
@@ -72,19 +72,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
         enabledBorder: const OutlineInputBorder(
-      
           borderRadius: BorderRadius.all(Radius.circular(16)),
           borderSide: BorderSide(color: Colors.amber, width: 1),
         ),
         focusedBorder: const OutlineInputBorder(
-       gapPadding: 16,
+          gapPadding: 16,
           borderRadius: BorderRadius.all(Radius.circular(16)),
           borderSide: BorderSide(
             color: Colors.amber,
             width: 2,
           ),
-          
-
         ),
         suffixIcon: widget.hidden
             ? IconButton(
