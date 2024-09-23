@@ -14,11 +14,7 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: background,
-        iconTheme: IconThemeData(color: kOrange),
-      ),
-      backgroundColor: background,
+      appBar: AppBar(),
       body: BlocBuilder<GameCubit, GameState>(
         builder: (context, state) {
           if (state.winner != null || state.isDraw) {
@@ -70,8 +66,6 @@ Widget buildGameUI(
     ],
   );
 }
-
-
 
 Widget buildBoard(BuildContext context, GameState state) {
   return Column(

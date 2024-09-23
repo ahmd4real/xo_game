@@ -12,17 +12,12 @@ class EnterTeamsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: background,
-      appBar: AppBar(
-        backgroundColor: background,
-        iconTheme: IconThemeData(color: kOrange),
-        
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: ListView(children: [
           titleWidget(context),
-           const SizedBox(height: 32),
+          const SizedBox(height: 32),
           //SizedBox(height: MediaQuery.sizeOf(context).height / 3),
           CustomTextFormField(
             hidden: false,
@@ -41,8 +36,13 @@ class EnterTeamsPage extends StatelessWidget {
             color2: Colors.amber,
             text: 'Start Game',
             onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (contxet) =>  GamePage(p1: p1.text, p2: p2.text,)));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (contxet) => GamePage(
+                            p1: p1.text,
+                            p2: p2.text,
+                          )));
             },
           )
         ]),

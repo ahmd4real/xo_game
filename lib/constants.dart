@@ -27,10 +27,17 @@ const String winnerWord='assets/images/winner_word.png';
 const String x='assets/images/x.png';
 const String o='assets/images/o.png';
 const String font='SpenbebGame';
+const String regFont='Rimouski';
 
 //urls
-const String baseUrl='https://xogame.runasp.net/api/Accounts';
+                     
+const String baseUrl='https://xogame.runasp.net/api/Accounts/';
 
 
 //audios
 const String pressSound='sounds/mixkit-modern-technology-select-3124.wav';
+
+
+//Keys
+
+String kToken='';

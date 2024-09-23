@@ -8,11 +8,7 @@ class LevelsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: background,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      backgroundColor: background,
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
         child: ListView(children: [

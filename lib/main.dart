@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
+import 'package:xo_game/models/Login/login_bloc.dart';
+import 'package:xo_game/models/SignUp/sign_up_bloc.dart';
+import 'package:xo_game/models/Verification/verification_bloc.dart';
+import 'package:xo_game/services/auth_services.dart';
+
 import 'package:xo_game/view/screens/home_page.dart';
 
 void main() {
@@ -12,9 +18,30 @@ class Game extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GameCubit(),
+    final authServices = AuthServices(baseUrl: baseUrl);
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => GameCubit()),
+        BlocProvider(create: (context) => AuthBloc(authServices: authServices)),
+        BlocProvider<SignUpBloc>(
+          create: (context) => SignUpBloc(authServices: authServices),
+        ),
+        BlocProvider<VerificationCodeBloc>(
+          create: (context) => VerificationCodeBloc(authServices: authServices),
+        ),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(authServices: authServices),
+        ),
+      ],
       child: MaterialApp(
+        theme: ThemeData(
+          scaffoldBackgroundColor: background,
+          appBarTheme: AppBarTheme(
+            backgroundColor: background,
+            
+            iconTheme: const IconThemeData(color: Colors.amber),
+          ),
+        ),
         debugShowCheckedModeBanner: false,
         home: HomePage(),
       ),

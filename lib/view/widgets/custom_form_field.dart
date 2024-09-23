@@ -13,6 +13,8 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.maxLines,
     this.prefixIcon,
+
+    
   });
 
   final String? labelText, hintText;
@@ -47,9 +49,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   Widget build(BuildContext context) {
     return TextFormField(
       style: const TextStyle(
-        fontFamily: font,
+        fontFamily: regFont,
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 16,
       ),
       obscureText: isHidden,
       validator: widget.validator ??
@@ -59,14 +61,16 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             }
             return null;
           },
+          
       cursorColor: kBlue,
       keyboardType: widget.keyboardType,
       controller: widget.controller,
       onChanged: widget.onChanged,
       decoration: InputDecoration(
         labelText: widget.labelText,
+        labelStyle: const TextStyle(color: Colors.white70,fontFamily: font),
         hintText: widget.hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
+        hintStyle: const TextStyle(color: Colors.white70,fontFamily: font),
         border: const OutlineInputBorder(
           borderSide: BorderSide(width: 2),
           borderRadius: BorderRadius.all(Radius.circular(16)),

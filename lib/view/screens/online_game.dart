@@ -8,11 +8,7 @@ class OnlineGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: background,
-        appBar: AppBar(
-          backgroundColor: background,
-          iconTheme: IconThemeData(color: kOrange),
-        ),
+        appBar: AppBar(),
         body: Center(
           child: Spin(
             infinite: true,

@@ -2,10 +2,12 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
 
-Widget titleWidget(BuildContext context){
+Widget titleWidget(BuildContext context,{int sz=8}){
     return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -13,19 +15,19 @@ Widget titleWidget(BuildContext context){
               FadeInLeft(
                   child: SizedBox(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height / 8,
+                height: MediaQuery.of(context).size.height / sz,
                 child: Image.asset('assets/images/tic.png'),
               )),
               FadeInUp(
                   child: SizedBox(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height / 8,
+                height: MediaQuery.of(context).size.height / sz,
                 child: Image.asset('assets/images/tac.png'),
               )),
               FadeInRight(
                   child: SizedBox(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height / 8,
+                height: MediaQuery.of(context).size.height / sz,
                 child: Image.asset('assets/images/toe.png'),
               ))
             ],
@@ -117,4 +119,38 @@ Widget symbolWidget(String symbol,double sz){
                   ]),
             ),
   );
+}
+
+
+Future<String?> getData(String key) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString(key);
+}
+
+bool passwordMatched(String s1,String s2){
+  return s1==s2;
+}
+
+String? emailValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Email is required';
+  }
+  final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+  if (!emailRegex.hasMatch(value)) {
+    return 'Enter a valid email';
+  }
+  return null;
+}
+
+Widget snipkit(BuildContext context){
+   return SpinKitCircle(
+  itemBuilder: (BuildContext context, int index) {
+    return const DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.amber,
+      ),
+    );
+  }, 
+);
 }
