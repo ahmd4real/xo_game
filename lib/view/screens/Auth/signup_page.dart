@@ -27,7 +27,7 @@ class SignUpPage extends StatelessWidget {
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (context, state) {
         if (state is SignUpLoading) {
-          // Show loading
+          
         } else if (state is SignUpSuccess) {
           Navigator.push(
             context,

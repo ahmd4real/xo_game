@@ -9,7 +9,7 @@ import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/Auth/enter_email.dart';
 import 'package:xo_game/view/screens/Auth/signup_page.dart';
 
-import 'package:xo_game/view/screens/profile_page.dart';
+
 import 'package:xo_game/view/widgets/custom_button.dart';
 import 'package:xo_game/view/widgets/custom_form_field.dart';
 
@@ -27,13 +27,7 @@ class LoginPage extends StatelessWidget {
       listener: (context, state) {
         if (state is AuthLoading) {
         } else if (state is AuthSuccess) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProfilePage(
-                      userName: state.userName,
-                    )),
-          );
+          Navigator.pop(context);
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -116,7 +110,9 @@ class LoginPage extends StatelessWidget {
                           '${emailController.text}  ${passwordController.text}');
                       if (formKey.currentState!.validate()) {
                         context.read<AuthBloc>().add(LoginEvent(
-                            emailController.text, passwordController.text));
+                            emailController.text,
+                            passwordController.text,
+                            context));
                       }
                     },
                   ),

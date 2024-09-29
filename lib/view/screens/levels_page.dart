@@ -13,40 +13,44 @@ class LevelsPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
         child: ListView(children: [
           const SizedBox(
-            height: 80,
+            height: 32,
           ),
           const Center(
               child: Text(
             "Select Difficulty",
-            style: TextStyle(
-                color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            style:
+                TextStyle(color: Colors.amber, fontSize: 32, fontFamily: font),
           )),
           const SizedBox(
             height: 32,
           ),
           LevelsButton(
+            image: 'assets/images/easy.png',
             color1: kRed,
             color2: kOrange,
             text: 'Easy',
           ),
           const SizedBox(
-            height: 64,
+            height: 16,
           ),
           LevelsButton(
+            image: 'assets/images/medium.png',
             color1: kGreen,
             color2: kBlue,
             text: 'Medium',
           ),
           const SizedBox(
-            height: 64,
+            height: 16,
           ),
           LevelsButton(
+            image: 'assets/images/hard.png',
             color1: kPurple,
             color2: kPink,
             text: 'Hard',
           ),
           const SizedBox(
-            height: 64,
+            height: 16,
           ),
         ]),
       ),

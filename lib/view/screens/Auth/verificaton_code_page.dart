@@ -7,7 +7,6 @@ import 'package:xo_game/models/Verification/verification_event.dart';
 import 'package:xo_game/models/Verification/verification_state.dart';
 import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/Auth/login_page.dart';
-import 'package:xo_game/view/screens/home_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
 import 'package:xo_game/view/widgets/custom_form_field.dart';
 
@@ -40,7 +39,13 @@ class VerificationCodePage extends StatelessWidget {
               MaterialPageRoute(builder: (context) => LoginPage()),
             );
             // Handle password reset success
-          } else {}
+          } else {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+              (route) => false,
+            );
+          }
         } else if (state is VerificationCodeFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -54,9 +59,7 @@ class VerificationCodePage extends StatelessWidget {
         }
       },
       child: ModalProgressHUD(
-        progressIndicator: const CircularProgressIndicator(
-          color: Colors.amber,
-        ),
+        progressIndicator: snipkit(context),
         inAsyncCall: context.watch<VerificationCodeBloc>().state
             is VerificationCodeLoading,
         child: Scaffold(
@@ -73,7 +76,7 @@ class VerificationCodePage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: Column(
                     children: [
-                      //const SizedBox(height: 16),
+                    
                       CustomTextFormField(
                         prefixIcon: Icons.verified_user_outlined,
                         keyboardType: TextInputType.number,
@@ -96,13 +99,6 @@ class VerificationCodePage extends StatelessWidget {
                                   isForResetPassword: resetPass,
                                   newPassword: newPassword,
                                 ));
-
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
                           }
                         },
                       ),

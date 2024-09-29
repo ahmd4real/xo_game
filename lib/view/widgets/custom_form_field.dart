@@ -13,8 +13,6 @@ class CustomTextFormField extends StatefulWidget {
     this.validator,
     this.maxLines,
     this.prefixIcon,
-
-    
   });
 
   final String? labelText, hintText;

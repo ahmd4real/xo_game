@@ -96,7 +96,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const ProfilePage(userName: '')));
+                                        const ProfilePage(userName: '',email: '',)));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(

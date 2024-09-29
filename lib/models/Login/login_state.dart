@@ -12,14 +12,13 @@ class AuthLoading extends AuthState {}
 class AuthSuccess extends AuthState {
   final String email;
   final String userName;
-  
+   String? profilePicture;  // Add profile picture here
 
-  AuthSuccess(this.email, this.userName, );
+  AuthSuccess(this.email, this.userName, this.profilePicture);
 
   @override
-  List<Object> get props => [email, userName, ];
+  List<Object> get props => [email, userName, profilePicture??''];
 }
-
 class AuthFailure extends AuthState {
   final String error;
 

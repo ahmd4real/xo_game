@@ -1,9 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
+
 import 'package:xo_game/utilities.dart';
 
 Future<void> storeTokens(String jwt, String refreshToken, String jwtExpiry,
@@ -61,30 +67,43 @@ Future<bool> refreshJwtToken() async {
   }
 }
 
-Future<bool> signOut() async {
-  //await ensureJwtToken();
+Future<bool> signOut(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? refreshToken = prefs.getString('refreshToken');
-  String? email = prefs.getString('email');
+  String? token = await getData('jwt');
+  print('refreshToken: $token');
+
   final response = await http.delete(
     Uri.parse('${baseUrl}SignOut'),
-    headers: {'Content-Type': 'application/json-patch+json'},
-    body: jsonEncode({'email': email, 'refreshToken': refreshToken}),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    },
   );
 
   if (response.statusCode == 200) {
-    print('Account Deleted');
-    prefs.clear().then((value) => print('Shared preferences cleared'));
-    var profilePic;
-    print('profile Picture after delete $profilePic');
+    print('Successfully signed out');
+    
+    // Retrieve profilePic before clearing preferences
     final profilePicFromStorage = await getData('profilePic');
-    print('profile Picture from storage after delete $profilePicFromStorage');
+    print('Profile picture before clearing: $profilePicFromStorage');
+    
+    await prefs.clear();
+    
+    // Set the global profilePic to null
+    profilePic = null;
+    
+    // Reset the ProfileImageCubit with the default avatar image
+    context.read<ProfileImageCubit>().setAvatarImg(Image.asset('assets/images/avatar.png'));
+    
+    print('Shared preferences cleared and profile image reset to default');
+
     return true;
   } else {
-    print('Failed to delete account');
+    print('Failed to sign out ${response.statusCode}');
     return false;
   }
 }
+
 
 Future<bool> changePassword(String oldPassword, String newPassword) async {
   await ensureJwtToken();
@@ -108,42 +127,20 @@ Future<bool> changePassword(String oldPassword, String newPassword) async {
 }
 
 Future<int?> updateUserData({
-  required bool updateFirstName,
-  required bool updateLastName,
-  required bool updateBio,
-  String? newFirstName,
-  String? newLastName,
-  String? newBio,
+  required bool updateUserName,
+  String? newuserName,
 }) async {
   await ensureJwtToken();
 
   List<Map<String, dynamic>> updateData =
       List<Map<String, dynamic>>.empty(growable: true);
-  if (updateFirstName) {
+  if (updateUserName) {
     updateData.add({
       "operationType": 0,
       "path": "firstName",
       "op": "replace",
       "from": "string",
-      "value": newFirstName
-    });
-  }
-  if (updateLastName) {
-    updateData.add({
-      "operationType": 0,
-      "path": "lastName",
-      "op": "replace",
-      "from": "string",
-      "value": newLastName
-    });
-  }
-  if (updateBio) {
-    updateData.add({
-      "operationType": 0,
-      "path": "biography",
-      "op": "replace",
-      "from": "string",
-      "value": newBio
+      "value": newuserName
     });
   }
 
@@ -174,82 +171,33 @@ Future<int?> updateUserData({
   }
 }
 
+Future<bool> uploadImage(CroppedFile croppedFile) async {
+  File imageFile = File(croppedFile.path);
+  var request = http.MultipartRequest(
+    'POST',
+    Uri.parse('${baseUrl}settings/profile-picture'),
+  );
+  request.headers.addAll({
+    'Content-Type': 'multipart/form-data',
+    'Authorization': 'Bearer ${await getData('jwt')}'
+  });
+  request.files.add(await http.MultipartFile.fromPath(
+    'newPicture',
+    imageFile.path,
+    filename: imageFile.path,
+  ));
+  var response = await request.send();
+  if (response.statusCode == 200) {
+    print("File uploaded successfully!");
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String newProfilePicUrl = croppedFile.path;
+    prefs.setString('profilePicture', newProfilePicUrl);
 
-
-
-
-
-
-// Future<void> uploadImage(CroppedFile croppedFile) async {
-//   File imageFile = File(croppedFile.path);
-// <<<<<<< HEAD
-//   var request = http.MultipartRequest(
-//     'POST',
-//     Uri.parse(
-//         '${baseUrl}settings/profile-picture'), // Replace with your upload URL
-//   );
-//   request.headers.addAll(
-//     {
-//       'Content-Type': 'multipart/form-data',
-//       'Authorization': 'Bearer ${await getData('jwt')}'
-//     },
-//   );
-//   request.files.add(
-//     await http.MultipartFile.fromPath(
-//       'newPicture',
-//       imageFile.path,
-//       filename: imageFile.path,
-//     ),
-//   );
-//   var response = await request.send();
-//   if (response.statusCode == 200) {
-//     print("File uploaded successfully!");
-//     profilePic = imageFile.path;
-//     print('profile picture form service uploadeImage: $profilePic');
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     prefs.setString('profilePicture', imageFile.path);
-//   } else {
-//     print("File upload failed: ${response.statusCode}");
-// =======
-//   if (imageFile != null) {
-//     var request = http.MultipartRequest(
-//       'POST',
-//       Uri.parse(
-//           '${baseUrl}settings/profile-picture'), // Replace with your upload URL
-//     );
-//     request.headers.addAll(
-//       {
-//         'Content-Type': 'multipart/form-data',
-//         'Authorization': 'Bearer ${await getData('jwt')}'
-//       },
-//     );
-//     request.files.add(
-//       await http.MultipartFile.fromPath(
-//         'newPicture',
-//         imageFile.path,
-//         filename: imageFile.path,
-//       ),
-//     );
-//     var response = await request.send();
-//     if (response.statusCode == 200) {
-//       print("File uploaded successfully!");
-//       profilePic = imageFile.path;
-//       print('profile picture form service uploadeImage: $profilePic');
-//       SharedPreferences prefs = await SharedPreferences.getInstance();
-//       prefs.setString('profilePicture', profilePic!);
-//     } else {
-//       print("File upload failed: ${response.statusCode}");
-//     }
-// >>>>>>> parent of 0a2bda4 (hhandle some stuff)
-//   }
-// }
-
-
-
-
-
-
-
-
-
+    print('Profile picture updated in SharedPreferences: $newProfilePicUrl');
+    return true;
+  } else {
+    print("File upload failed: ${response.statusCode}");
+    return false;
+  }
+}

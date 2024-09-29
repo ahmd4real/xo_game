@@ -22,20 +22,22 @@ class BoardSq extends StatelessWidget {
     return InkWell(
       onTap: symbol.isEmpty ? onTap : null,
       child: Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          border: Border(
-            bottom:
-                bottom ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
-            left: left ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
-            right:
-                right ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
-            top: top ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: bottom
+                  ? BorderSide(color: kOrange, width: 2)
+                  : BorderSide.none,
+              left:
+                  left ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
+              right: right
+                  ? BorderSide(color: kOrange, width: 2)
+                  : BorderSide.none,
+              top: top ? BorderSide(color: kOrange, width: 2) : BorderSide.none,
+            ),
           ),
-        ),
-        child: symbolWidget(symbol,70)
-      ),
+          child: symbolWidget(symbol, 70)),
     );
   }
 }

@@ -18,7 +18,6 @@ class EnterTeamsPage extends StatelessWidget {
         child: ListView(children: [
           titleWidget(context),
           const SizedBox(height: 32),
-          //SizedBox(height: MediaQuery.sizeOf(context).height / 3),
           CustomTextFormField(
             hidden: false,
             controller: p1,
@@ -36,6 +35,10 @@ class EnterTeamsPage extends StatelessWidget {
             color2: Colors.amber,
             text: 'Start Game',
             onTap: () {
+              List<String> players = [p1.text, p2.text];
+              players.shuffle();
+              p1.text = players[0];
+              p2.text = players[1];
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
