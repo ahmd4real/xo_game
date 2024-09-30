@@ -5,6 +5,7 @@ class GameState {
   final List<int> oMoves;
   final String? winner;
   final bool isDraw;
+  final List<int>? winningCombo; // Add this line
 
   GameState({
     required this.board,
@@ -13,6 +14,7 @@ class GameState {
     required this.oMoves,
     this.winner,
     this.isDraw = false,
+    this.winningCombo, // Add this line
   });
 
   factory GameState.initial() {
@@ -31,6 +33,7 @@ class GameState {
     List<int>? oMoves,
     String? winner,
     bool? isDraw,
+    List<int>? winningCombo, // Add this line
   }) {
     return GameState(
       board: board ?? this.board,
@@ -39,16 +42,18 @@ class GameState {
       oMoves: oMoves ?? this.oMoves,
       winner: winner,
       isDraw: isDraw ?? this.isDraw,
+      winningCombo: winningCombo ?? this.winningCombo, // Add this line
     );
   }
 
-  factory GameState.win({required String winner}) {
+  factory GameState.win({required String winner, required List<int> winningCombo}) {
     return GameState(
       board: List.filled(9, ''),
       isXturn: true,
       xMoves: [],
       oMoves: [],
       winner: winner,
+      winningCombo: winningCombo, // Add this line
     );
   }
 

@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:xo_game/models/GameCubit/game_state.dart';
+import 'dart:async';
 
 class GameCubit extends Cubit<GameState> {
   GameCubit() : super(GameState.initial());
-
+  
   void makeMove(int index) {
-    if (state.board[index].isEmpty) {
+    if (state.board[index].isEmpty && state.winner == null && !state.isDraw) {
       final newBoard = List<String>.from(state.board);
       newBoard[index] = state.isXturn ? 'X' : 'O';
 
@@ -52,13 +53,29 @@ class GameCubit extends Cubit<GameState> {
       if (board[combo[0]] == board[combo[1]] &&
           board[combo[1]] == board[combo[2]] &&
           board[combo[0]].isNotEmpty) {
-        emit(GameState.win(winner: board[combo[0]]));
+        // Clear all moves except the winning moves
+        final clearedBoard = List<String>.filled(9, '');
+        clearedBoard[combo[0]] = board[combo[0]];
+        clearedBoard[combo[1]] = board[combo[1]];
+        clearedBoard[combo[2]] = board[combo[2]];
+
+        emit(state.copyWith(board: clearedBoard, winner: board[combo[0]]));
+
+        // Delay the reset by 2 seconds
+        Future.delayed(const Duration(seconds: 2), () {
+          resetGame();
+        });
         return;
       }
     }
 
     if (!board.contains('')) {
-      emit(GameState.draw());
+      emit(state.copyWith(isDraw: true));
+
+      // Delay the reset by 2 seconds
+      Future.delayed(const Duration(seconds: 2), () {
+        resetGame();
+      });
     }
   }
 }
