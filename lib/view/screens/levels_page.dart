@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
+
+import 'package:xo_game/models/GameCubit/game_cubit.dart';
+import 'package:xo_game/view/screens/game_page.dart';
 import 'package:xo_game/view/widgets/levels_button.dart';
 
 class LevelsPage extends StatelessWidget {
@@ -30,6 +34,18 @@ class LevelsPage extends StatelessWidget {
             color1: kRed,
             color2: kOrange,
             text: 'Easy',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GamePage(
+                    p1: 'Player',
+                    p2: 'Bot',
+                    gameMode: GameMode.playerVsBotEasy,
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(
             height: 16,
@@ -39,6 +55,18 @@ class LevelsPage extends StatelessWidget {
             color1: kGreen,
             color2: kBlue,
             text: 'Medium',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GamePage(
+                    p1: 'Player',
+                    p2: 'Bot',
+                    gameMode: GameMode.playerVsBotMedium,
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(
             height: 16,
@@ -48,6 +76,21 @@ class LevelsPage extends StatelessWidget {
             color1: kPurple,
             color2: kPink,
             text: 'Hard',
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BlocProvider(
+                    create: (context) => GameCubit(gameMode: GameMode.playerVsBotHard),
+                    child: const GamePage(
+                      p1: 'Player',
+                      p2: 'Bot',
+                      gameMode: GameMode.playerVsBotHard,
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
           const SizedBox(
             height: 16,

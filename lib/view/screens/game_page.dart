@@ -9,8 +9,9 @@ import 'package:xo_game/view/widgets/board_sq.dart';
 import 'package:xo_game/view/widgets/user_card.dart';
 
 class GamePage extends StatelessWidget {
-  const GamePage({super.key, required this.p1, required this.p2});
+  const GamePage({super.key,  this.p1='Player1',  this.p2='Player2',required this.gameMode});
   final String p1, p2;
+  final GameMode gameMode;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/models/GameCubit/game_cubit.dart';
 import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/game_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
@@ -42,9 +44,14 @@ class EnterTeamsPage extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (contxet) => GamePage(
-                            p1: p1.text,
-                            p2: p2.text,
+                      builder: (contxet) => BlocProvider(
+                            create: (context) => GameCubit(gameMode: GameMode
+                                .playerVsPlayer),
+                            child: GamePage(
+                              gameMode: GameMode.playerVsPlayer,
+                              p1: p1.text,
+                              p2: p2.text,
+                            ),
                           )));
             },
           )
