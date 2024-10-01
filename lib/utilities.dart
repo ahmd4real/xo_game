@@ -57,7 +57,7 @@ void showGameEndDialog(
         content: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Image.asset(
-              kAvatar,
+              message != 'It\'s a draw!' ? 'assets/images/win.png' : 'assets/images/draw.png',
               width: MediaQuery.sizeOf(context).width / 2,
               height: MediaQuery.sizeOf(context).width / 2,
             )),
@@ -73,21 +73,22 @@ void showGameEndDialog(
               ),
             ),
           ),
+          if(message!='It\'s a draw!')
           Center(
               child: Swing(
             infinite: true,
             child: Image.asset(winnerWord),
           )),
           Center(
-            child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(kOrange),
-              ),
-              onPressed: () {
+            child: GestureDetector(
+              onTap: () {
                 Navigator.of(context).pop();
                 context.read<GameCubit>().resetGame();
               },
-              child: const Text('Play Again'),
+              child: Image.asset('assets/images/play_again.png',
+                  width: MediaQuery.sizeOf(context).width / 4,
+                  height: MediaQuery.sizeOf(context).width / 
+                  4),
             ),
           ),
         ],
@@ -192,7 +193,7 @@ imagePick(ImageSource source, Function(Image) setImage) async {
 }
 
 CroppedFile? imageToupload;
- cropImage(File imgFile, Function(Image) setImage) async {
+cropImage(File imgFile, Function(Image) setImage) async {
   final croppedFile = await ImageCropper().cropImage(
       sourcePath: imgFile.path,
       aspectRatioPresets: Platform.isAndroid
@@ -231,9 +232,7 @@ CroppedFile? imageToupload;
     imageCache.clear();
     setImage(Image.file(File(croppedFile.path)));
     imageToupload = croppedFile;
-    
   }
-
 }
 
 Future<void> saveProfilePicture(String profilePicUrl) async {

@@ -4,7 +4,7 @@ import 'dart:async';
 
 class GameCubit extends Cubit<GameState> {
   GameCubit() : super(GameState.initial());
-  
+
   void makeMove(int index) {
     if (state.board[index].isEmpty && state.winner == null && !state.isDraw) {
       final newBoard = List<String>.from(state.board);
@@ -59,23 +59,16 @@ class GameCubit extends Cubit<GameState> {
         clearedBoard[combo[1]] = board[combo[1]];
         clearedBoard[combo[2]] = board[combo[2]];
 
-        emit(state.copyWith(board: clearedBoard, winner: board[combo[0]]));
-
-        // Delay the reset by 2 seconds
-        Future.delayed(const Duration(seconds: 2), () {
-          resetGame();
+        Future.delayed(const Duration(milliseconds: 200), () {
+          emit(state.copyWith(board: clearedBoard, winner: board[combo[0]]));
         });
+
         return;
       }
     }
 
     if (!board.contains('')) {
       emit(state.copyWith(isDraw: true));
-
-      // Delay the reset by 2 seconds
-      Future.delayed(const Duration(seconds: 2), () {
-        resetGame();
-      });
     }
   }
 }

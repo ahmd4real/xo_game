@@ -22,7 +22,9 @@ class GamePage extends StatelessWidget {
               String message = state.winner != null
                   ? '${state.winner == 'X' ? p1 : p2} wins!'
                   : 'It\'s a draw!';
-             // showGameEndDialog(context, message);
+              Future.delayed(const Duration(milliseconds: 1000), () {
+                showGameEndDialog(context, message);
+              });
             });
           }
           return buildGameUI(context, state, p1, p2);
