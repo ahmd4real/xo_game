@@ -12,7 +12,11 @@ class CustomButtomSheet_imgPick extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: kDarkPurple,
       child: Container(
+        decoration: BoxDecoration(
+         color:  kDarkPurple
+        ),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height / 5.2,
         margin: const EdgeInsets.only(top: 8.0),
@@ -22,8 +26,9 @@ class CustomButtomSheet_imgPick extends StatelessWidget {
           children: [
             BottomSheetBuilderIcon(
               source: ImageSource.camera,
-              icon: Icons.photo_camera_outlined,
+              icon: Icons.photo_camera_rounded,
               text: 'camera',
+              
               setImage: setImage,
             ),
             BottomSheetBuilderIcon(

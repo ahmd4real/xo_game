@@ -5,6 +5,7 @@ import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
 import 'package:xo_game/services/services.dart';
 import 'package:xo_game/view/screens/edit_profile_page.dart';
 import 'package:xo_game/view/screens/home_page.dart';
+import 'package:xo_game/view/screens/top_ranked_page.dart';
 import 'package:xo_game/view/widgets/profile_card.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -29,7 +30,7 @@ class ProfilePage extends StatelessWidget {
               ),
               child: IconButton(
                 onPressed: () async {
-                   bool loggedOut = await signOut(context);
+                  bool loggedOut = await signOut(context);
                   if (loggedOut) {
                     Navigator.pushReplacement(
                       context,
@@ -80,10 +81,11 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       userName,
-                      style: const TextStyle(
+                      style:  const TextStyle(
                         color: Colors.amber,
                         fontSize: 24,
                         fontFamily: regFont,
+                        fontWeight: FontWeight.bold
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -100,18 +102,29 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 32),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ProfileCard(
+                const ProfileCard(
                   title: '+1000000',
                   image: coin,
                   sz: 10,
+                  
                 ),
-                ProfileCard(
-                  title: '23',
-                  image: kass,
-                  sz: 10,
+                InkWell(
+                  child: const ProfileCard(
+                    title: '23',
+                    image: kass,
+                    sz: 10,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TopRankedPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

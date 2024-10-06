@@ -15,7 +15,6 @@ class UserCard extends StatelessWidget {
   final String userName, symbol;
   final bool isActive;
 
-   
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,10 +47,15 @@ class UserCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          const CircleAvatar(
-            radius: 40,
-            backgroundImage: AssetImage(kAvatar),
-          ),
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color:Colors.amber,width: 2),
+              color: Colors.amber
+            ),
+              height: MediaQuery.of(context).size.width / 4,
+              width: MediaQuery.of(context).size.width / 4,
+              child: Image.asset(avatar ?? kAvatar)),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Text(

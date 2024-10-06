@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
-
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
 import 'package:xo_game/view/screens/game_page.dart';
 import 'package:xo_game/view/widgets/levels_button.dart';
@@ -38,10 +37,14 @@ class LevelsPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const GamePage(
-                    p1: 'Player',
-                    p2: 'Bot',
-                    gameMode: GameMode.playerVsBotEasy,
+                  builder: (context) => BlocProvider(
+                    create: (context) =>
+                        GameCubit(gameMode: GameMode.playerVsBotEasy),
+                    child:  GamePage(
+                      avatar2: 'assets/images/easy.png',
+                      p1: 'You',
+                      p2: 'Bot',
+                    ),
                   ),
                 ),
               );
@@ -56,13 +59,17 @@ class LevelsPage extends StatelessWidget {
             color2: kBlue,
             text: 'Medium',
             onTap: () {
-              Navigator.push(
+               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const GamePage(
-                    p1: 'Player',
-                    p2: 'Bot',
-                    gameMode: GameMode.playerVsBotMedium,
+                  builder: (context) => BlocProvider(
+                    create: (context) =>
+                        GameCubit(gameMode: GameMode.playerVsBotMedium),
+                    child:  GamePage(
+                      avatar2: 'assets/images/medium.png',
+                      p1: 'You',
+                      p2: 'Bot',
+                    ),
                   ),
                 ),
               );
@@ -77,15 +84,16 @@ class LevelsPage extends StatelessWidget {
             color2: kPink,
             text: 'Hard',
             onTap: () {
-              Navigator.push(
+               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => BlocProvider(
-                    create: (context) => GameCubit(gameMode: GameMode.playerVsBotHard),
-                    child: const GamePage(
-                      p1: 'Player',
-                      p2: 'Bot',
-                      gameMode: GameMode.playerVsBotHard,
+                    create: (context) =>
+                        GameCubit(gameMode: GameMode.playerVsBotHard),
+                    child:  GamePage(
+                      avatar1: 'assets/images/hard.png',
+                      p1: 'Bot',
+                      p2: 'You',
                     ),
                   ),
                 ),

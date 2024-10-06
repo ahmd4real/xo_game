@@ -2,108 +2,45 @@ import 'package:bloc/bloc.dart';
 import 'package:xo_game/models/GameCubit/game_state.dart';
 import 'dart:async';
 
-// class GameCubit extends Cubit<GameState> {
-//   GameCubit() : super(GameState.initial());
-
-//   void makeMove(int index) {
-//     if (state.board[index].isEmpty && state.winner == null && !state.isDraw) {
-//       final newBoard = List<String>.from(state.board);
-//       newBoard[index] = state.isXturn ? 'X' : 'O';
-
-//       final xMoves =
-//           state.isXturn ? List<int>.from(state.xMoves) : state.xMoves;
-//       if (state.isXturn) {
-//         xMoves.add(index);
-//       }
-
-//       final oMoves =
-//           !state.isXturn ? List<int>.from(state.oMoves) : state.oMoves;
-//       if (!state.isXturn) {
-//         oMoves.add(index);
-//       }
-
-//       emit(state.copyWith(
-//         board: newBoard,
-//         isXturn: !state.isXturn,
-//         xMoves: xMoves,
-//         oMoves: oMoves,
-//       ));
-
-//       _checkWinOrDraw(newBoard);
-//     }
-//   }
-
-//   void resetGame() {
-//     emit(GameState.initial());
-//   }
-
-//   void _checkWinOrDraw(List<String> board) {
-//     const winningCombinations = [
-//       [0, 1, 2],
-//       [3, 4, 5],
-//       [6, 7, 8],
-//       [0, 3, 6],
-//       [1, 4, 7],
-//       [2, 5, 8],
-//       [0, 4, 8],
-//       [2, 4, 6],
-//     ];
-
-//     for (var combo in winningCombinations) {
-//       if (board[combo[0]] == board[combo[1]] &&
-//           board[combo[1]] == board[combo[2]] &&
-//           board[combo[0]].isNotEmpty) {
-//         // Clear all moves except the winning moves
-//         final clearedBoard = List<String>.filled(9, '');
-//         clearedBoard[combo[0]] = board[combo[0]];
-//         clearedBoard[combo[1]] = board[combo[1]];
-//         clearedBoard[combo[2]] = board[combo[2]];
-
-//         Future.delayed(const Duration(milliseconds: 200), () {
-//           emit(state.copyWith(board: clearedBoard, winner: board[combo[0]]));
-//         });
-
-//         return;
-//       }
-//     }
-
-//     if (!board.contains('')) {
-//       emit(state.copyWith(isDraw: true));
-//     }
-//   }
-// }
-
-
-// ////////////////////////////////////////////////////////////////////////////////
-
 import 'dart:math';
 import 'package:xo_game/models/bot/min_max.dart';
- // Assuming Minimax class is in this file
 
-enum Difficulty { easy, medium, hard }
-
-// Ensure you have the Minimax class
-
-enum GameMode { playerVsPlayer, playerVsBotEasy, playerVsBotMedium, playerVsBotHard }
+enum GameMode {
+  playerVsPlayer,
+  playerVsBotEasy,
+  playerVsBotMedium,
+  playerVsBotHard
+}
 
 class GameCubit extends Cubit<GameState> {
   final GameMode gameMode;
-  final Minimax minimax = Minimax(); // Create an instance of Minimax class
+  final Minimax minimax=Minimax(botSymbol: 'X'); // Minimax instance
   Random random = Random();
 
-  GameCubit({ this.gameMode=GameMode.playerVsBotHard}) : super(GameState.initial());
+  GameCubit({this.gameMode = GameMode.playerVsBotHard,
 
+  
+  
+  })
+      : super(GameState.initial());
+
+  /// Player or bot makes a move
   void makeMove(int index) {
-    if (state.board[index].isEmpty && state.winner == null && !state.isDraw) {
+    if (state.board[index].isEmpty &&
+        state.winner == null &&
+        !state.isDraw &&
+        !state.isBotTurn) {
       final newBoard = List<String>.from(state.board);
       newBoard[index] = state.isXturn ? 'X' : 'O';
 
-      final xMoves = state.isXturn ? List<int>.from(state.xMoves) : state.xMoves;
+      final xMoves =
+          state.isXturn ? List<int>.from(state.xMoves) : state.xMoves;
       if (state.isXturn) {
         xMoves.add(index);
       }
 
-      final oMoves = !state.isXturn ? List<int>.from(state.oMoves) : state.oMoves;
+      final oMoves =
+          !state.isXturn ? List<int>.from(state.oMoves) : state.oMoves;
       if (!state.isXturn) {
         oMoves.add(index);
       }
@@ -117,31 +54,35 @@ class GameCubit extends Cubit<GameState> {
 
       _checkWinOrDraw(newBoard);
 
-      // If playing against a bot, let the bot make a move
-      if (gameMode != GameMode.playerVsPlayer && !state.isXturn && state.winner == null && !state.isDraw) {
-        Future.delayed(const Duration(milliseconds: 500), () {
+      // If it's a bot game, let the bot make a move after a short delay
+      if (gameMode != GameMode.playerVsPlayer &&
+          !state.isXturn &&
+          state.winner == null &&
+          !state.isDraw) {
+        emit(state.copyWith(isBotTurn: true)); // Set bot's turn
+        Future.delayed(const Duration(milliseconds: 200), () {
           _botMakeMove();
         });
       }
     }
   }
 
-  // Bot makes its move based on the selected difficulty level
+  /// Bot makes its move
   void _botMakeMove() {
     int botMove;
     if (gameMode == GameMode.playerVsBotEasy) {
       botMove = _getRandomMove(); // Easy: Random move
     } else if (gameMode == GameMode.playerVsBotMedium) {
-      botMove = _getMinimaxMove('O'); // Medium: Minimax playing as 'O'
+      botMove = _getMinimaxMove('O'); // Medium: Minimax as 'O'
     } else {
-      botMove = _getMinimaxMove('X'); // Hard: Minimax playing as 'X'
+      botMove = _getMinimaxMove('X'); // Hard: Minimax as 'X'
     }
 
-    // Make the bot's move
+    emit(state.copyWith(isBotTurn: false)); // Reset bot's turn
     makeMove(botMove);
   }
 
-  // Easy mode: random available move
+  /// Get a random available move for the bot (easy difficulty)
   int _getRandomMove() {
     List<int> availableMoves = [];
     for (int i = 0; i < state.board.length; i++) {
@@ -152,7 +93,7 @@ class GameCubit extends Cubit<GameState> {
     return availableMoves[random.nextInt(availableMoves.length)];
   }
 
-  // Minimax-based move (medium and hard)
+  /// Minimax move calculation for medium and hard difficulties
   int _getMinimaxMove(String botSymbol) {
     List<List<String>> boardMatrix = [
       [state.board[0], state.board[1], state.board[2]],
@@ -160,22 +101,23 @@ class GameCubit extends Cubit<GameState> {
       [state.board[6], state.board[7], state.board[8]]
     ];
 
-    minimax.minimax(boardMatrix, 0, botSymbol == 'X', true); // Depth can be adjusted if needed
+    minimax.minimax(botSymbol);
 
-    // Convert the boardMatrix back to linear form and find the bot's move
     for (int i = 0; i < 9; i++) {
       if (state.board[i] != boardMatrix[i ~/ 3][i % 3]) {
         return i;
       }
     }
 
-    return _getRandomMove(); // Fallback in case of unexpected failure
+    return _getRandomMove(); // Fallback to random move if minimax fails
   }
 
+  /// Reset the game state
   void resetGame() {
     emit(GameState.initial());
   }
 
+  /// Check for win or draw
   void _checkWinOrDraw(List<String> board) {
     const winningCombinations = [
       [0, 1, 2],
@@ -192,8 +134,11 @@ class GameCubit extends Cubit<GameState> {
       if (board[combo[0]] == board[combo[1]] &&
           board[combo[1]] == board[combo[2]] &&
           board[combo[0]].isNotEmpty) {
-        Future.delayed(const Duration(milliseconds: 200), () {
-          emit(state.copyWith(winner: board[combo[0]]));
+        _clearNonWinningMoves(combo); // Clear non-winning moves
+        emit(state.copyWith(winner: board[combo[0]], winningCombo: combo));
+
+        Future.delayed(const Duration(milliseconds: 400), () {
+          resetGame(); // Reset game after short delay
         });
         return;
       }
@@ -201,6 +146,30 @@ class GameCubit extends Cubit<GameState> {
 
     if (!board.contains('')) {
       emit(state.copyWith(isDraw: true));
+
+      Future.delayed(const Duration(milliseconds: 200), () {
+        resetGame(); // Reset game after short delay on draw
+      });
     }
+  }
+
+  /// Clear non-winning moves on the board, highlight only winning moves
+  void _clearNonWinningMoves(List<int> winningCombo) {
+    final newBoard = List<String>.filled(9, '');
+
+    for (var index in winningCombo) {
+      newBoard[index] = state.board[index];
+    }
+
+    final newXMoves =
+        state.xMoves.where((move) => winningCombo.contains(move)).toList();
+    final newOMoves =
+        state.oMoves.where((move) => winningCombo.contains(move)).toList();
+
+    emit(state.copyWith(
+      board: newBoard,
+      xMoves: newXMoves,
+      oMoves: newOMoves,
+    ));
   }
 }

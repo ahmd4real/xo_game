@@ -22,7 +22,7 @@ class LevelsButton extends StatelessWidget {
         height: MediaQuery.of(context).size.height / 8,
         width: MediaQuery.of(context).size.width / 1.5,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(64),
               gradient: LinearGradient(colors: [color1, color2])),
@@ -31,7 +31,8 @@ class LevelsButton extends StatelessWidget {
                 //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Image(
-                    image: AssetImage(image),
+                    image: AssetImage(image,),
+                    
                   ),
                   const SizedBox(
                     width: 16,
@@ -40,7 +41,7 @@ class LevelsButton extends StatelessWidget {
                     text,
                     style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 28,
                         // foreground: Paint()
                         //   ..style = PaintingStyle.stroke
                         //   ..strokeWidth = 2.0

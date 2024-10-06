@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xo_game/constants.dart';
 
 String? profilePic;
 
@@ -26,7 +27,7 @@ class ProfileImageCubit extends Cubit<ProfileImageState> {
         return Image.network('https://xogame.runasp.net/$profilePic');
       }
     } else {
-      return Image.asset('assets/images/avatar.png');
+      return Image.asset(kAvatar);
     }
   }
 
@@ -84,7 +85,7 @@ class ErrorAvatarState extends ProfileImageState {
   final String errorMsg;
 
   ErrorAvatarState({required this.errorMsg})
-      : super(avatarImg: Image.asset('assets/images/avatar.png'));
+      : super(avatarImg: Image.asset(kAvatar));
 }
 
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/utilities.dart';
 
@@ -6,8 +8,7 @@ class BoardSq extends StatelessWidget {
   final String symbol;
   final VoidCallback onTap;
   final bool left, right, top, bottom;
-
-  const BoardSq({
+  BoardSq({
     super.key,
     this.bottom = true,
     this.left = true,
@@ -17,10 +18,26 @@ class BoardSq extends StatelessWidget {
     required this.onTap,
   });
 
+  final player = AudioPlayer();
+  void loadSound() {
+    player.setAsset('assets/sounds/mixkit-on-or-off-light-switch-tap-2585.wav');
+  }
+
+  void playSound() {
+    player.play();
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: symbol.isEmpty ? onTap : null,
+      splashColor: kDarkPurple,
+      onTap: symbol.isEmpty
+          ? () {
+              loadSound();
+              playSound();
+              onTap();
+            }
+          : null,
       child: Container(
           width: 100,
           height: 100,

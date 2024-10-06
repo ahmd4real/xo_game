@@ -18,7 +18,6 @@ class HomePage extends StatelessWidget {
 
   String userName = "";
 
-
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -61,7 +60,7 @@ class HomePage extends StatelessWidget {
                 image: coin,
                 title: '+100000',
                 sz: 20,
-                fontSz: 16,
+                fontSz: 20,
               ),
               IconButton(
                 icon: Container(
@@ -88,7 +87,7 @@ class HomePage extends StatelessWidget {
                             builder: (context) => ProfilePage(
                                   userName: userName,
                                   email: email,
-                                )));
+                    )));
                   }
                 },
               ),

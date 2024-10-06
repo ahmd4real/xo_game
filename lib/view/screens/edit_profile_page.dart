@@ -76,11 +76,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   color2: kPurple,
                   text: 'Save',
                   onTap: () async {
-                    // if (formKey.currentState!.validate() ) {
-                    //   updateUserData(
-                    //     updateUserName: userName != userNameController.text,
-                    //   );
-
                     setState(() {
                       isLoading = true;
                     });

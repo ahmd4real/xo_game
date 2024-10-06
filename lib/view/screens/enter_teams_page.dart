@@ -45,10 +45,9 @@ class EnterTeamsPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (contxet) => BlocProvider(
-                            create: (context) => GameCubit(gameMode: GameMode
-                                .playerVsPlayer),
+                            create: (context) =>
+                                GameCubit(gameMode: GameMode.playerVsPlayer),
                             child: GamePage(
-                              gameMode: GameMode.playerVsPlayer,
                               p1: p1.text,
                               p2: p2.text,
                             ),

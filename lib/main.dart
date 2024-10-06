@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
+import 'package:xo_game/models/Internet/internet_bloc.dart';
 import 'package:xo_game/models/Login/login_bloc.dart';
 import 'package:xo_game/models/SignUp/sign_up_bloc.dart';
 import 'package:xo_game/models/Verification/verification_bloc.dart';
@@ -28,7 +29,8 @@ class Game extends StatelessWidget {
     final authServices = AuthServices(baseUrl: baseUrl);
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => GameCubit()),
+        BlocProvider(
+            create: (context) => GameCubit(gameMode: GameMode.playerVsPlayer)),
         BlocProvider(create: (context) => AuthBloc(authServices: authServices)),
         BlocProvider<SignUpBloc>(
           create: (context) => SignUpBloc(authServices: authServices),
@@ -41,6 +43,9 @@ class Game extends StatelessWidget {
         ),
         BlocProvider<ProfileImageCubit>(
           create: (context) => ProfileImageCubit(),
+        ),
+        BlocProvider<InternetBloc>(
+          create: (context) => InternetBloc(),
         ),
       ],
       child: MaterialApp(

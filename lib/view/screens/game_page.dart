@@ -9,9 +9,16 @@ import 'package:xo_game/view/widgets/board_sq.dart';
 import 'package:xo_game/view/widgets/user_card.dart';
 
 class GamePage extends StatelessWidget {
-  const GamePage({super.key,  this.p1='Player1',  this.p2='Player2',required this.gameMode});
-  final String p1, p2;
-  final GameMode gameMode;
+  GamePage(
+      {super.key,
+      this.p1 = 'Player1',
+      this.p2 = 'Player2',
+      this.avatar1 = kAvatar,
+      this.avatar2 = kAvatar});
+
+  String p1, p2, avatar1, avatar2;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,22 +28,26 @@ class GamePage extends StatelessWidget {
           if (state.winner != null || state.isDraw) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               String message = state.winner != null
-                  ? '${state.winner == 'X' ? p1 : p2} wins!'
+                  ? '${state.winner == 'X' ? p1 : p2}  wins!'
                   : 'It\'s a draw!';
-              Future.delayed(const Duration(milliseconds: 1000), () {
+              List<String> players = [p1, p2];
+              players.shuffle();
+              p1 = players[0];
+              p2 = players[1];
+              Future.delayed(const Duration(milliseconds: 500), () {
                 showGameEndDialog(context, message);
               });
             });
           }
-          return buildGameUI(context, state, p1, p2);
+          return buildGameUI(context, state, p1, p2, avatar1, avatar2);
         },
       ),
     );
   }
 }
 
-Widget buildGameUI(
-    BuildContext context, GameState state, String p1, String p2) {
+Widget buildGameUI(BuildContext context, GameState state, String p1, String p2,
+    String avatar1, String avatar2) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -45,7 +56,7 @@ Widget buildGameUI(
         children: [
           BounceInRight(
             child: UserCard(
-              avatar: kAvatar,
+              avatar: avatar1,
               userName: p1,
               symbol: 'X',
               isActive: state.isXturn,
@@ -53,7 +64,7 @@ Widget buildGameUI(
           ),
           BounceInLeft(
             child: UserCard(
-              avatar: kAvatar,
+              avatar: avatar2,
               userName: p2,
               symbol: 'O',
               isActive: !state.isXturn,

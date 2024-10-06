@@ -1,113 +1,98 @@
 class Minimax {
-  // Check if the three values are the same and not empty
-  bool haveTheSameValueAndNotEmpty(String x, String y, String z) {
-    return x == y && x == z && x != ' ';
+  List<String> board;
+  String? currentWinner;
+  String botSymbol; // Bot's symbol, can be 'X' or 'O'
+
+  Minimax({required this.botSymbol}) 
+      : board = List.filled(9, ' '), currentWinner = null;
+
+  // Make a move on the board
+  bool makeMove(int square, String letter) {
+    if (board[square] == ' ') {
+      board[square] = letter;
+      if (winner(square, letter)) {
+        currentWinner = letter;
+      }
+      return true;
+    }
+    return false;
   }
 
-  // Check the winner on the board
-  int checkWinner(List<List<String>> board) {
-    // 2: X winner
-    // -2: O winner
-    // 0: Tie
-    // 1: No winner
+  // Check if the player has won
+  bool winner(int square, String letter) {
+    int row = square ~/ 3;
+    List<String> rowArr = board.sublist(row * 3, (row + 1) * 3);
+    if (rowArr.every((s) => s == letter)) {
+      return true;
+    }
 
-    // Check rows
-    for (int i = 0; i < 3; i++) {
-      if (haveTheSameValueAndNotEmpty(board[i][0], board[i][1], board[i][2])) {
-        return board[i][0] == 'X' ? 2 : -2;
+    int col = square % 3;
+    List<String> colArr = [board[col], board[col + 3], board[col + 6]];
+    if (colArr.every((s) => s == letter)) {
+      return true;
+    }
+
+    if (square % 2 == 0) {
+      List<String> diagonal1 = [board[0], board[4], board[8]];
+      if (diagonal1.every((s) => s == letter)) {
+        return true;
+      }
+
+      List<String> diagonal2 = [board[2], board[4], board[6]];
+      if (diagonal2.every((s) => s == letter)) {
+        return true;
       }
     }
 
-    // Check columns
-    for (int i = 0; i < 3; i++) {
-      if (haveTheSameValueAndNotEmpty(board[0][i], board[1][i], board[2][i])) {
-        return board[0][i] == 'X' ? 2 : -2;
-      }
+    return false;
+  }
+
+  // Return available moves
+  List<int> availableMoves() {
+    return [for (int i = 0; i < board.length; i++) if (board[i] == ' ') i];
+  }
+
+  // Check if the board has empty squares
+  bool emptySquares() {
+    return board.contains(' ');
+  }
+
+  // Minimax algorithm implementation
+  Map<String, dynamic> minimax(String player) {
+    String otherPlayer = player == 'X' ? 'O' : 'X';
+
+    // Check if the other player has won
+    if (currentWinner == otherPlayer) {
+      return {
+        'position': null,
+        'score': (otherPlayer == botSymbol ? 1 : -1) * (availableMoves().length + 1)
+      };
+    } else if (!emptySquares()) {
+      return {'position': null, 'score': 0};
     }
 
-    // Check diagonals
-    if (haveTheSameValueAndNotEmpty(board[0][0], board[1][1], board[2][2])) {
-      return board[0][0] == 'X' ? 2 : -2;
-    }
+    Map<String, dynamic> best = (player == botSymbol)
+        ? {'position': null, 'score': -double.infinity}
+        : {'position': null, 'score': double.infinity};
 
-    if (haveTheSameValueAndNotEmpty(board[2][0], board[1][1], board[0][2])) {
-      return board[2][0] == 'X' ? 2 : -2;
-    }
+    for (int move in availableMoves()) {
+      board[move] = player;
+      Map<String, dynamic> simScore = minimax(otherPlayer);
 
-    // Check for tie
-    bool tie = true;
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-        if (board[i][j] == ' ') {
-          tie = false;
-          break;
+      board[move] = ' ';
+      currentWinner = null;
+      simScore['position'] = move;
+
+      if (player == botSymbol) {
+        if (simScore['score'] > best['score']) {
+          best = simScore;
+        }
+      } else {
+        if (simScore['score'] < best['score']) {
+          best = simScore;
         }
       }
     }
-
-    if (tie) return 0;
-
-    // No winner yet
-    return 1;
-  }
-
-  // Minimax algorithm
-  int minimax(List<List<String>> board, int depth, bool isMaximizing, bool firstTime) {
-    int result = checkWinner(board);
-    if (result != 1 || depth == 0) return result;
-
-    if (isMaximizing) {
-      int finalScore = -10;
-      int finalI = 0, finalJ = 0;
-
-      for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-          if (board[i][j] == ' ') {
-            board[i][j] = 'X';
-            int score = minimax(board, depth - 1, false, false);
-            board[i][j] = ' ';
-            if (score > finalScore) {
-              finalScore = score;
-              finalI = i;
-              finalJ = j;
-            }
-          }
-        }
-      }
-      if (firstTime) {
-        board[finalI][finalJ] = 'O';
-      }
-      return finalScore;
-    } else {
-      int finalScore = 10;
-      int finalI = 0, finalJ = 0;
-
-      for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-          if (board[i][j] == ' ') {
-            board[i][j] = 'O';
-            int score = minimax(board, depth - 1, true, false);
-            board[i][j] = ' ';
-            if (score < finalScore) {
-              finalScore = score;
-              finalI = i;
-              finalJ = j;
-            }
-          }
-        }
-      }
-      if (firstTime) {
-        board[finalI][finalJ] = 'O';
-      }
-      return finalScore;
-    }
-  }
-
-  // To print the board (for debugging purposes)
-  void drawBoard(List<List<String>> board) {
-    for (var row in board) {
-      print(row.map((e) => "| $e |").join(' '));
-      print("\n----------------------\n");
-    }
+    return best;
   }
 }

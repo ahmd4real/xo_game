@@ -43,7 +43,7 @@ class AuthServices {
 
     if (  profilePic == null || profilePic!.isEmpty) {
       context.read<ProfileImageCubit>().setAvatarImg(
-        Image.asset('assets/images/avatar.png'),
+        Image.asset(kAvatar),
       );
     } else {
       context.read<ProfileImageCubit>().setAvatarImg(
@@ -53,7 +53,8 @@ class AuthServices {
 
     return data;
   } else {
-    throw Exception('Failed to login ${response.statusCode}');
+    throw Exception('Email or Password not correct');
+    //throw Exception('Failed to login ${response.statusCode}');
   }
 }
 
@@ -82,7 +83,7 @@ class AuthServices {
         throw Exception('This Email Already Exists');
       } else {
         throw Exception(
-            'Failed to sign up. Status code: ${response.statusCode}');
+            'Failed To SignUp');
       }
     } catch (e) {
       rethrow;

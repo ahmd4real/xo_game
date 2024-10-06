@@ -24,7 +24,7 @@ class SignalRService {
     await hubConnection.start();
     print('SignalR connection started');
 
-    hubConnection.on('SendM', (parameters) {
+    hubConnection.on('SearchForPlayers', (parameters) {
       print('Hello from onSearchForPlayers: $parameters');
       if (parameters != null && parameters.length == 3) {
         final gameId = parameters[0] as String;
@@ -43,7 +43,7 @@ class SignalRService {
   Future<void>searchForPlayers() async {
     if (hubConnection.state == HubConnectionState.Connected) {
       try {
-        await hubConnection.invoke('SendM');
+        await hubConnection.invoke('SearchForPlayers');
         print('SearchForPlayers invoked successfully');
       } catch (e) {
         print('Error invoking SearchForPlayers: $e');

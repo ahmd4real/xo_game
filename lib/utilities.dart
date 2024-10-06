@@ -47,51 +47,53 @@ void showGameEndDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
-      return AlertDialog(
-        contentPadding: const EdgeInsets.all(0),
-        backgroundColor: background,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
-          side: BorderSide(color: kDarkPurple, width: 2),
-        ),
-        content: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              message != 'It\'s a draw!' ? 'assets/images/win.png' : 'assets/images/draw.png',
-              width: MediaQuery.sizeOf(context).width / 2,
-              height: MediaQuery.sizeOf(context).width / 2,
-            )),
-        actions: [
-          Center(
-            child: Text(
-              textAlign: TextAlign.center,
-              message,
-              style: const TextStyle(
-                fontFamily: font,
-                color: Colors.amber,
-                fontSize: 24,
+      return BounceInDown(
+        child: AlertDialog(
+          contentPadding: const EdgeInsets.all(0),
+          backgroundColor: background,
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            side: BorderSide(color: kDarkPurple, width: 2),
+          ),
+          content: BounceInLeft(
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  message != 'It\'s a draw!'
+                      ? 'assets/images/win.png'
+                      : 'assets/images/draw.png',
+                  width: MediaQuery.sizeOf(context).width / 2,
+                  height: MediaQuery.sizeOf(context).width / 2,
+                )),
+          ),
+          actions: [
+            BounceInRight(
+              delay: const Duration(milliseconds: 500),
+              child: Center(
+                child: Text(
+                  textAlign: TextAlign.center,
+                  message,
+                  style: const TextStyle(
+                    fontFamily: font,
+                    color: Colors.amber,
+                    fontSize: 24,
+                  ),
+                ),
               ),
             ),
-          ),
-          if(message!='It\'s a draw!')
-          Center(
-              child: Swing(
-            infinite: true,
-            child: Image.asset(winnerWord),
-          )),
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                context.read<GameCubit>().resetGame();
-              },
-              child: Image.asset('assets/images/play_again.png',
-                  width: MediaQuery.sizeOf(context).width / 4,
-                  height: MediaQuery.sizeOf(context).width / 
-                  4),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  context.read<GameCubit>().resetGame();
+                },
+                child: Image.asset('assets/images/play_again.png',
+                    width: MediaQuery.sizeOf(context).width / 4,
+                    height: MediaQuery.sizeOf(context).width / 4),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     },
   );
@@ -217,10 +219,10 @@ cropImage(File imgFile, Function(Image) setImage) async {
       uiSettings: [
         AndroidUiSettings(
             toolbarTitle: "Edit Photo",
-            toolbarColor: Colors.green,
+            toolbarColor: kDarkPurple,
             toolbarWidgetColor: Colors.white,
-            statusBarColor: Colors.green,
-            activeControlsWidgetColor: Colors.green,
+            statusBarColor: kDarkPurple,
+            activeControlsWidgetColor: kGreen,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         IOSUiSettings(
