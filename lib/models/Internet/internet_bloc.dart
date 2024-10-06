@@ -2,33 +2,36 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:equatable/equatable.dart';
 
 part 'internet_event.dart';
 part 'internet_state.dart';
 
 class InternetBloc extends Bloc<InternetEvent, InternetState> {
+  StreamSubscription? subscription;
   InternetBloc() : super(InternetInitial()) {
-    StreamSubscription? stream;
     on<InternetEvent>((event, emit) {
       if (event is ConnectedEvent) {
-        emit(const ConnectedState(
-         internetState: true,
-        ));
-      } else if (event is NotConnectedEvent) {
-        emit(const NotConnectedState(
+        emit(ConnectedState(internetState: true));
+      } else if (event is DisconnectedEvent) {
+        emit(DisconnectedState(
           internetState: true,
         ));
       }
       
     });
 
-    stream=Connectivity().onConnectivityChanged.listen((event) {
-        if (event == ConnectivityResult.mobile || event == ConnectivityResult.wifi) {
+    subscription =Connectivity().onConnectivityChanged.listen((event  ) {
+      // sameh solve it here , event retuen as list so we access it with [0]
+        if (event[0] == ConnectivityResult.wifi || event[0] == ConnectivityResult.mobile) {
           add(ConnectedEvent());
-        }else {
-          add(NotConnectedEvent());
+          
+        } else {
+          add(DisconnectedEvent());
         }
-      });
+        print(event.toString());
+      }
+     
+      );
+    
   }
 }

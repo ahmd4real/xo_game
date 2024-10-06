@@ -40,6 +40,7 @@ class SignalRService {
     });
   }
 
+
   Future<void>searchForPlayers() async {
     if (hubConnection.state == HubConnectionState.Connected) {
       try {

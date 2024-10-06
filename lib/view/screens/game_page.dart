@@ -109,6 +109,7 @@ Widget buildBoard(BuildContext context, GameState state) {
         ),
       ),
       BounceInRight(
+     
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -135,6 +136,7 @@ Widget buildBoard(BuildContext context, GameState state) {
         ),
       ),
       BounceInLeft(
+        
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

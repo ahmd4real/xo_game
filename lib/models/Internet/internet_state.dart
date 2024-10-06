@@ -1,21 +1,18 @@
+
 part of 'internet_bloc.dart';
 
-sealed class InternetState extends Equatable {
-  const InternetState();
+abstract class InternetState  {}
+
+
+class InternetInitial extends InternetState {
   
-  @override
-  List<Object> get props => [];
 }
-
-final class InternetInitial extends InternetState {}
-
 class ConnectedState extends InternetState {
-   final bool internetState;
-
-  const ConnectedState({required this.internetState});
-}
-class NotConnectedState extends InternetState {
   final bool internetState;
+  ConnectedState({required this.internetState});
+}
 
-  const NotConnectedState({required this.internetState});
+class DisconnectedState extends InternetState {
+   final bool internetState;
+  DisconnectedState({required this.internetState});
 }

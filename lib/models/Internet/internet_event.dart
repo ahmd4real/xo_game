@@ -1,15 +1,6 @@
 part of 'internet_bloc.dart';
 
-sealed class InternetEvent extends Equatable {
-  const InternetEvent();
-
-  
-
-  @override
-  List<Object> get props => [];
-}
-
+abstract class InternetEvent {}
 
 class ConnectedEvent extends InternetEvent {}
-class NotConnectedEvent extends InternetEvent {}
-
+class DisconnectedEvent extends InternetEvent {}
