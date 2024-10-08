@@ -69,8 +69,7 @@ class _OnlineGameState extends State<OnlineGame> {
       } else if (state is DisconnectedState) {
         return Scaffold(
           appBar: AppBar(),
-          body: FadeIn(
-           
+          body: BounceInDown(
             child: const Center(
                 child: Image(image: AssetImage('assets/images/error.png'))),
           ),
