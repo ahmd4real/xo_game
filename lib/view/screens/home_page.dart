@@ -56,40 +56,46 @@ class HomePage extends StatelessWidget {
         actions: [
           Row(
             children: [
-              const ProfileCard(
-                image: coin,
-                title: '+100000',
-                sz: 20,
-                fontSz: 20,
-              ),
-              IconButton(
-                icon: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kDarkPurple,
-                    border: Border.all(color: Colors.white, width: 1),
-                  ),
-                  child: CircleAvatar(
-                    backgroundImage: imageState.avatarImg.image,
-                  ),
+              BounceInLeft(
+                delay: const Duration(seconds: 1),
+                child: const ProfileCard(
+                  image: coin,
+                  title: '+100000',
+                  sz: 20,
+                  fontSz: 20,
                 ),
-                onPressed: () async {
-                  bool isLogin = await isLoggedIn();
-                  if (isLogin == false) {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                  } else {
-                    String userName = await getData('userName') ?? "";
-                    String email = await getData('email') ?? '';
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage(
-                                  userName: userName,
-                                  email: email,
-                    )));
-                  }
-                },
+              ),
+              BounceInLeft(
+                
+                child: IconButton(
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: kDarkPurple,
+                      border: Border.all(color: Colors.white, width: 1),
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: imageState.avatarImg.image,
+                    ),
+                  ),
+                  onPressed: () async {
+                    bool isLogin = await isLoggedIn();
+                    if (isLogin == false) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    } else {
+                      String userName = await getData('userName') ?? "";
+                      String email = await getData('email') ?? '';
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage(
+                                    userName: userName,
+                                    email: email,
+                      )));
+                    }
+                  },
+                ),
               ),
             ],
           )
@@ -135,7 +141,7 @@ class HomePage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {
-                                  return OnlineGame();
+                                  return const OnlineGame();
                                 }),
                               );
                             } else {

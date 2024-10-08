@@ -11,8 +11,6 @@ import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
 import 'package:xo_game/services/auth_services.dart';
 
 import 'package:xo_game/view/screens/home_page.dart';
-import 'package:xo_game/view/screens/internet.dart';
-import 'package:xo_game/view/screens/online_game.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

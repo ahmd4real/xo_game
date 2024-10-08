@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -56,105 +57,107 @@ class SignUpPage extends StatelessWidget {
           appBar: AppBar(),
           body: Form(
             key: formKey,
-            child: ListView(
-              children: [
-                titleWidget(context, sz: 12),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Center(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 16),
-                        CustomTextFormField(
-                          controller: userNameController,
-                          hidden: false,
-                          labelText: 'User Name',
-                          prefixIcon: Icons.person_outlined,
-                        ),
-                        const SizedBox(height: 16),
-                        CustomTextFormField(
-                          controller: emailController,
-                          hidden: false,
-                          labelText: 'Email',
-                          keyboardType: TextInputType.emailAddress,
-                          validator: emailValidator,
-                          prefixIcon: Icons.mail_outlined,
-                        ),
-                        const SizedBox(height: 16),
-                        CustomTextFormField(
-                          controller: passwordController,
-                          hidden: true,
-                          labelText: 'Password',
-                          prefixIcon: Icons.key_outlined,
-                        ),
-                        const SizedBox(height: 16),
-                        CustomTextFormField(
-                          controller: confirmPasswordController,
-                          hidden: true,
-                          labelText: 'Confirm Password',
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Field is Required';
-                            }
-                            if (!passwordMatched(
-                                passwordController.text, value)) {
-                              return 'Passwords do not match';
-                            }
-                            return null;
-                          },
-                          prefixIcon: Icons.key_outlined,
-                        ),
-                        const SizedBox(height: 16),
-                        CustomButton(
-                          color1: kPink,
-                          color2: Colors.amber,
-                          text: 'Sign Up',
-                          onTap: () {
-                            if (formKey.currentState!.validate()) {
-                              context.read<SignUpBloc>().add(SignUpSubmitted(
-                                    userName: userNameController.text,
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    confirmPassword:
-                                        confirmPasswordController.text,
-                                  ));
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Already have an account? ',
-                      style: TextStyle(color: Colors.grey, fontFamily: font),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginPage()));
-                      },
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontFamily: font,
-                          decoration: TextDecoration.underline,
-                          fontWeight: FontWeight.w600,
-                        ),
+            child: BounceInDown(
+              child: ListView(
+                children: [
+                  titleWidget(context, sz: 12),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 16),
+                          CustomTextFormField(
+                            controller: userNameController,
+                            hidden: false,
+                            labelText: 'User Name',
+                            prefixIcon: Icons.person_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomTextFormField(
+                            controller: emailController,
+                            hidden: false,
+                            labelText: 'Email',
+                            keyboardType: TextInputType.emailAddress,
+                            validator: emailValidator,
+                            prefixIcon: Icons.mail_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomTextFormField(
+                            controller: passwordController,
+                            hidden: true,
+                            labelText: 'Password',
+                            prefixIcon: Icons.key_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomTextFormField(
+                            controller: confirmPasswordController,
+                            hidden: true,
+                            labelText: 'Confirm Password',
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Field is Required';
+                              }
+                              if (!passwordMatched(
+                                  passwordController.text, value)) {
+                                return 'Passwords do not match';
+                              }
+                              return null;
+                            },
+                            prefixIcon: Icons.key_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          CustomButton(
+                            color1: kPink,
+                            color2: Colors.amber,
+                            text: 'Sign Up',
+                            onTap: () {
+                              if (formKey.currentState!.validate()) {
+                                context.read<SignUpBloc>().add(SignUpSubmitted(
+                                      userName: userNameController.text,
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      confirmPassword:
+                                          confirmPasswordController.text,
+                                    ));
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-              ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Already have an account? ',
+                        style: TextStyle(color: Colors.grey, fontFamily: font),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: font,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                ],
+              ),
             ),
           ),
         ),

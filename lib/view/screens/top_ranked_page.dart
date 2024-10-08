@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/view/widgets/top_players_widget.dart';
@@ -26,15 +27,17 @@ class TopRankedPage extends StatelessWidget {
               height: 16,
             ),
             Flexible(
-              child: ListView(
-                children: [
-                  for (int i = 0; i < 10; i++)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4),
-                      child: TopPlayersWidget(
-                          userName: 'ahmd4real', points: 10000000),
-                    )
-                ],
+              child: JelloIn(
+                child: ListView(
+                  children: [
+                    for (int i = 0; i < 10; i++)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 4),
+                        child: TopPlayersWidget(
+                            userName: 'ahmd4real', points: 10000000),
+                      )
+                  ],
+                ),
               ),
             ),
           ],

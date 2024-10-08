@@ -20,10 +20,6 @@ Color kDarkPurple=const Color(0xff2c2056);
 
 //images
 const String kAvatar='assets/images/avatar.png';
-const String winnerBack='assets/images/winner_back.png';
-const String loserBack='assets/images/loser_back.png';
-const String drawBack='assets/images/draw_back.png';
-const String winnerWord='assets/images/winner_word.png';
 const String coin='assets/images/coin.png';
 const String x='assets/images/x.png';
 const String o='assets/images/o.png';

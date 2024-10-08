@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -49,7 +50,7 @@ class VerificationCodePage extends StatelessWidget {
         } else if (state is VerificationCodeFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                backgroundColor: Colors.amber,
+                backgroundColor:kGreen,
                 content: Center(
                     child: Text(
                   state.error,
@@ -66,46 +67,48 @@ class VerificationCodePage extends StatelessWidget {
           appBar: AppBar(),
           body: Form(
             key: formKey,
-            child: ListView(
-              children: [
-                titleWidget(context),
-                const SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                  child: Column(
-                    children: [
-                    
-                      CustomTextFormField(
-                        prefixIcon: Icons.verified_user_outlined,
-                        keyboardType: TextInputType.number,
-                        controller: verifyCodeController,
-                        hidden: false,
-                        labelText: 'Enter your verification code',
-                      ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                        color1: kRed,
-                        color2: kOrange,
-                        text: 'Continue',
-                        onTap: () {
-                          if (formKey.currentState!.validate()) {
-                            context
-                                .read<VerificationCodeBloc>()
-                                .add(VerifyCodeSubmitted(
-                                  email: email,
-                                  code: verifyCodeController.text,
-                                  isForResetPassword: resetPass,
-                                  newPassword: newPassword,
-                                ));
-                          }
-                        },
-                      ),
-                    ],
+            child: BounceInDown(
+              child: ListView(
+                children: [
+                  titleWidget(context),
+                  const SizedBox(
+                    height: 16,
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    child: Column(
+                      children: [
+                      
+                        CustomTextFormField(
+                          prefixIcon: Icons.verified_user_outlined,
+                          keyboardType: TextInputType.number,
+                          controller: verifyCodeController,
+                          hidden: false,
+                          labelText: 'Enter your verification code',
+                        ),
+                        const SizedBox(height: 16),
+                        CustomButton(
+                          color1: kRed,
+                          color2: kOrange,
+                          text: 'Continue',
+                          onTap: () {
+                            if (formKey.currentState!.validate()) {
+                              context
+                                  .read<VerificationCodeBloc>()
+                                  .add(VerifyCodeSubmitted(
+                                    email: email,
+                                    code: verifyCodeController.text,
+                                    isForResetPassword: resetPass,
+                                    newPassword: newPassword,
+                                  ));
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

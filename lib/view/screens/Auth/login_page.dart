@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -49,105 +50,107 @@ class LoginPage extends StatelessWidget {
             key: formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: ListView(
-                children: [
-                  titleWidget(context),
-                  const SizedBox(
-                    height: 32,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    controller: emailController,
-                    hidden: false,
-                    labelText: 'Email',
-                    validator: emailValidator,
-                    prefixIcon: Icons.mail_outlined,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  const SizedBox(height: 16),
-                  CustomTextFormField(
-                    controller: passwordController,
-                    hidden: true,
-                    labelText: 'Password',
-                    prefixIcon: Icons.key_outlined,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const EnterYourEmail()));
-                        },
-                        child: const Text(
-                          'Forgot Password?',
-                          style: TextStyle(
-                            fontFamily: font,
-                            decorationColor: Colors.grey,
-                            color: Colors.grey,
-                            fontSize: 14,
-                            decoration: TextDecoration.underline,
+              child: BounceInDown(
+                child: ListView(
+                  children: [
+                    titleWidget(context),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      controller: emailController,
+                      hidden: false,
+                      labelText: 'Email',
+                      validator: emailValidator,
+                      prefixIcon: Icons.mail_outlined,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextFormField(
+                      controller: passwordController,
+                      hidden: true,
+                      labelText: 'Password',
+                      prefixIcon: Icons.key_outlined,
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EnterYourEmail()));
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              fontFamily: font,
+                              decorationColor: Colors.grey,
+                              color: Colors.grey,
+                              fontSize: 14,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  CustomButton(
-                    color1: kPink,
-                    color2: kPurple,
-                    text: 'Login',
-                    onTap: () {
-                      print(
-                          '${emailController.text}  ${passwordController.text}');
-                      if (formKey.currentState!.validate()) {
-                        context.read<AuthBloc>().add(LoginEvent(
-                            emailController.text,
-                            passwordController.text,
-                            context));
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Don\'t have an account? ',
-                        style: TextStyle(
-                            color: Colors.grey, fontSize: 12, fontFamily: font),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUpPage()));
-                        },
-                        child: const Text(
-                          'Sign Up',
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    CustomButton(
+                      color1: kPink,
+                      color2: kPurple,
+                      text: 'Login',
+                      onTap: () {
+                        print(
+                            '${emailController.text}  ${passwordController.text}');
+                        if (formKey.currentState!.validate()) {
+                          context.read<AuthBloc>().add(LoginEvent(
+                              emailController.text,
+                              passwordController.text,
+                              context));
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Don\'t have an account? ',
                           style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontFamily: font,
-                            decorationColor: Colors.grey,
-                            decoration: TextDecoration.underline,
-                          ),
+                              color: Colors.grey, fontSize: 12, fontFamily: font),
                         ),
-                      )
-                    ],
-                  ),
-                ],
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignUpPage()));
+                          },
+                          child: const Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontFamily: font,
+                              decorationColor: Colors.grey,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

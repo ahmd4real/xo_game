@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
@@ -28,77 +29,85 @@ class LevelsPage extends StatelessWidget {
           const SizedBox(
             height: 32,
           ),
-          LevelsButton(
-            image: 'assets/images/easy.png',
-            color1: kRed,
-            color2: kOrange,
-            text: 'Easy',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) =>
-                        GameCubit(gameMode: GameMode.playerVsBotEasy),
-                    child:  GamePage(
-                      avatar2: 'assets/images/easy.png',
-                      p1: 'You',
-                      p2: 'Bot',
+          BounceInLeft(
+            child: LevelsButton(
+              image: 'assets/images/easy.png',
+              color1: kRed,
+              color2: kOrange,
+              text: 'Easy',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) =>
+                          GameCubit(gameMode: GameMode.playerVsBotEasy),
+                      child:  GamePage(
+                        avatar2: 'assets/images/easy.png',
+                        p1: 'You',
+                        p2: 'Bot',
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           const SizedBox(
             height: 16,
           ),
-          LevelsButton(
-            image: 'assets/images/medium.png',
-            color1: kGreen,
-            color2: kBlue,
-            text: 'Medium',
-            onTap: () {
-               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) =>
-                        GameCubit(gameMode: GameMode.playerVsBotMedium),
-                    child:  GamePage(
-                      avatar2: 'assets/images/medium.png',
-                      p1: 'You',
-                      p2: 'Bot',
+          BounceInLeft(
+            delay: const Duration(milliseconds: 250),
+            child: LevelsButton(
+              image: 'assets/images/medium.png',
+              color1: kGreen,
+              color2: kBlue,
+              text: 'Medium',
+              onTap: () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) =>
+                          GameCubit(gameMode: GameMode.playerVsBotMedium),
+                      child:  GamePage(
+                        avatar2: 'assets/images/medium.png',
+                        p1: 'You',
+                        p2: 'Bot',
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           const SizedBox(
             height: 16,
           ),
-          LevelsButton(
-            image: 'assets/images/hard.png',
-            color1: kPurple,
-            color2: kPink,
-            text: 'Hard',
-            onTap: () {
-               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BlocProvider(
-                    create: (context) =>
-                        GameCubit(gameMode: GameMode.playerVsBotHard),
-                    child:  GamePage(
-                      avatar1: 'assets/images/hard.png',
-                      p1: 'Bot',
-                      p2: 'You',
+          BounceInLeft(
+            delay: const Duration(milliseconds: 500),
+            child: LevelsButton(
+              image: 'assets/images/hard.png',
+              color1: kPurple,
+              color2: kPink,
+              text: 'Hard',
+              onTap: () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) =>
+                          GameCubit(gameMode: GameMode.playerVsBotHard),
+                      child:  GamePage(
+                        avatar1: 'assets/images/hard.png',
+                        p1: 'Bot',
+                        p2: 'You',
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           const SizedBox(
             height: 16,
