@@ -141,7 +141,7 @@ class HomePage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {
-                                  return const OnlineGame();
+                                  return  const OnlineGame();
                                 }),
                               );
                             } else {

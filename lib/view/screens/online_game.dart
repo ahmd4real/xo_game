@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/Internet/internet_bloc.dart';
+import 'package:xo_game/models/Player.dart';
+import 'package:xo_game/services/services.dart';
 import 'package:xo_game/services/signal_r.dart';
+import 'package:xo_game/view/screens/game_page.dart';
 
 class OnlineGame extends StatefulWidget {
   const OnlineGame({super.key});
@@ -14,6 +17,11 @@ class OnlineGame extends StatefulWidget {
 
 class _OnlineGameState extends State<OnlineGame> {
   final SignalRService signalRService = SignalRService();
+  @override
+  void dispose() {
+    signalRService.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +31,6 @@ class _OnlineGameState extends State<OnlineGame> {
             appBar: AppBar(),
             body: Center(
               child: Spin(
-                onFinish: (direction) {
-                  signalRService.searchForPlayers();
-                },
                 spins: 5,
                 duration: const Duration(seconds: 5),
                 child: Column(
@@ -33,13 +38,28 @@ class _OnlineGameState extends State<OnlineGame> {
                   children: [
                     FadeInLeft(
                       onFinish: (direction) {
-                        print('Finished spin 1');
-                        signalRService.setupSignalR(
-                          kToken,
-                          onSearchForPlayers: () {
-                            print('hello from onSearchForPlayers');
-                          },
+                        //setup connection and call the callback function
+
+                        signalRService.setupSignalR(kToken, onSearchForPlayers:
+                            (gameId, player1, player2) async {
+                          final Player p1 = await getPlayerInfo(player1);
+                          final Player p2 = await getPlayerInfo(player2);
+                          
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GamePage(
+                                p1: p1.userName!,
+                                p2: p2.userName!,
+                                gameId: gameId,
+                              ),
+                            ),
+                          );
+                        },
+                       
                         );
+
                       },
                       delay: const Duration(seconds: 1),
                       child: Image.asset(
@@ -54,6 +74,11 @@ class _OnlineGameState extends State<OnlineGame> {
                         'assets/images/tac.png',
                         width: 200,
                       ),
+                      //invoke search for players
+                      onFinish: (direction) {
+                        signalRService.searchForPlayers();
+                     
+                      },
                     ),
                     FadeInRight(
                       delay: const Duration(seconds: 2),

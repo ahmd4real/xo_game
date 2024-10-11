@@ -8,6 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/models/Player.dart';
 import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
 
 import 'package:xo_game/utilities.dart';
@@ -82,19 +83,21 @@ Future<bool> signOut(BuildContext context) async {
 
   if (response.statusCode == 200) {
     print('Successfully signed out');
-    
+
     // Retrieve profilePic before clearing preferences
     final profilePicFromStorage = await getData('profilePic');
     print('Profile picture before clearing: $profilePicFromStorage');
-    
+
     await prefs.clear();
-    
+
     // Set the global profilePic to null
     profilePic = null;
-    
+
     // Reset the ProfileImageCubit with the default avatar image
-    context.read<ProfileImageCubit>().setAvatarImg(Image.asset('assets/images/avatar.png'));
-    
+    context
+        .read<ProfileImageCubit>()
+        .setAvatarImg(Image.asset('assets/images/avatar.png'));
+
     print('Shared preferences cleared and profile image reset to default');
 
     return true;
@@ -103,7 +106,6 @@ Future<bool> signOut(BuildContext context) async {
     return false;
   }
 }
-
 
 Future<bool> changePassword(String oldPassword, String newPassword) async {
   await ensureJwtToken();
@@ -200,4 +202,18 @@ Future<bool> uploadImage(CroppedFile croppedFile) async {
     print("File upload failed: ${response.statusCode}");
     return false;
   }
+}
+
+Future<Player> getPlayerInfo(int playerId) async {
+  http.Response response = await http.get(
+    Uri.parse('https://xogame.runasp.net/api/Profile/$playerId'),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  );
+  if (response.statusCode == 200) {
+    return Player.fromJson(jsonDecode(response.body));
+  }
+  print('Failed to get player info: ${response.statusCode}');
+  return Player();
 }
