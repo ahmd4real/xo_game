@@ -14,6 +14,7 @@ class SignalRService {
   }) async {
     this.onSearchForPlayers = onSearchForPlayers;
     this.onGameplay = onGameplay;
+
     hubConnection = HubConnectionBuilder()
         .withUrl(
           'https://xogame.runasp.net/xo',
@@ -26,42 +27,36 @@ class SignalRService {
     if (hubConnection.state != HubConnectionState.Connected) {
       await hubConnection.start();
       print('SignalR connection started successfully');
-    }else{
+    } else {
       print('SignalR connection already started');
     }
 
     hubConnection.on('SearchForPlayers', (parameters) {
-      print('Hello from onSearchForPlayers: $parameters');
+      print('Received onSearchForPlayers: $parameters');
       if (parameters != null && parameters.length == 3) {
         final gameId = parameters[0] as String;
         final player1 = parameters[1] as int;
         final player2 = parameters[2] as int;
 
-        if (onSearchForPlayers != null) {
-          onSearchForPlayers(gameId, player1, player2);
-        }
+        onSearchForPlayers?.call(gameId, player1, player2);
       }
     });
 
     hubConnection.on('Gameplay', (parameters) {
-      print('Hello from Gameplay the callBack fun: $parameters');
+      print('Received Gameplay callback: $parameters');
       if (parameters != null && parameters.length == 1) {
         final winnerId = parameters[0] as int;
 
-        if (onGameplay != null) {
-          onGameplay(winnerId);
-        }
+        onGameplay?.call(winnerId);
       }
     });
   }
 
-
-
-  Future<void> gamePlay(GameTurns gameTurn) async {
+  Future<void> gamePlay(String id, int move) async {
     if (hubConnection.state == HubConnectionState.Connected) {
-      print('Gameplay invoked');
+      print('Invoking Gameplay');
       try {
-        await hubConnection.invoke('Gameplay', args: [gameTurn]);
+        await hubConnection.invoke('Gameplay', args: [id,move]);
         print('Gameplay invoked successfully');
       } catch (e) {
         print('Error invoking Gameplay: $e');
@@ -80,22 +75,35 @@ class SignalRService {
     }
   }
 
-  @override
-
   void dispose() {
-    print('Dispose method called, stopping SignalR connection...');
+    print('Dispose method called, cleaning up SignalR connection...');
+    // Remove listeners to avoid memory leaks
+    hubConnection.off('SearchForPlayers');
+    hubConnection.off('Gameplay');
+
+    // Stop the connection properly
     hubConnection.stop().then((_) {
       print('SignalR connection stopped successfully.');
     }).catchError((error) {
       print('Error stopping SignalR connection: $error');
     });
   }
+  void offSearchForPlayers() {
+    if (hubConnection.state == HubConnectionState.Connected) {
+      hubConnection.off('SearchForPlayers');
+      print('Off SearchForPlayers successfully');
+    }
+  }
+
+
+
 }
 
 
-  class GameTurns{
-    String id;
-    int move;
 
-    GameTurns(this.id, this.move);
-  }
+class GameTurns {
+  String id;
+  int move;
+
+  GameTurns(this.id, this.move);
+}

@@ -8,7 +8,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:xo_game/constants.dart';
-import 'package:xo_game/models/Player.dart';
+import 'package:xo_game/models/player.dart';
 import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
 
 import 'package:xo_game/utilities.dart';

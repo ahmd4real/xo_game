@@ -2,38 +2,31 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
-import 'package:xo_game/main.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
 import 'package:xo_game/models/GameCubit/game_state.dart';
 import 'package:xo_game/services/signal_r.dart';
 import 'package:xo_game/utilities.dart';
+import 'package:xo_game/view/screens/online_game.dart';
 import 'package:xo_game/view/widgets/board_sq.dart';
 import 'package:xo_game/view/widgets/user_card.dart';
 
-class GamePage extends StatefulWidget {
+class GamePage extends StatelessWidget {
   GamePage(
       {super.key,
       this.gameId = '',
       this.p1 = 'Player1',
       this.p2 = 'Player2',
       this.avatar1 = kAvatar,
-      this.avatar2 = kAvatar});
+      this.avatar2 = kAvatar
+      
+      });
 
   String p1, p2, avatar1, avatar2, gameId;
 
-  @override
-  State<GamePage> createState() => _GamePageState();
-}
+  //SignalRService signalRService = SignalRService();
 
-class _GamePageState extends State<GamePage> {
-  SignalRService signalRService = SignalRService();
   @override
-  void initState() {
-    signalRService.setupSignalR(kToken, onGameplay: (winnerId) async {
-      print('WinnerId: $winnerId');
-    });
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +37,22 @@ class _GamePageState extends State<GamePage> {
           if (state.winner != null || state.isDraw) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               String message = state.winner != null
-                  ? '${state.winner == 'X' ? widget.p1 : widget.p2}  wins!'
+                  ? '${state.winner == 'X' ? p1 : p2}  wins!'
                   : 'It\'s a draw!';
-              List<String> players = [widget.p1, widget.p2];
-              players.shuffle();
-              widget.p1 = players[0];
-              widget.p2 = players[1];
+              List<String> players = [p1, p2];
+
+              if (!players.contains('Bot')) {
+                players.shuffle();
+                p1 = players[0];
+                p2 = players[1];
+              }
               Future.delayed(const Duration(milliseconds: 500), () {
                 showGameEndDialog(context, message);
               });
             });
           }
-          return buildGameUI(context, state, widget.p1, widget.p2,
-              widget.avatar1, widget.avatar2, signalRService, widget.gameId);
+          return buildGameUI(context, state, p1, p2,
+              avatar1, avatar2, signalRServiceGlobal, gameId);
         },
       ),
     );
@@ -118,27 +114,27 @@ Widget buildBoard(BuildContext context, GameState state,
               top: false,
               symbol: state.board[0],
               onTap: () {
-                GameTurns gameTurn=GameTurns( gameId, 1);
+                GameTurns gameTurn = GameTurns(gameId, 1);
                 context.read<GameCubit>().makeMove(0);
-                signalRService.gamePlay(gameTurn);
+                signalRService.gamePlay(gameId, 1);
               },
             ),
             BoardSq(
                 top: false,
                 symbol: state.board[1],
                 onTap: () {
-                   GameTurns gameTurn=GameTurns( gameId, 2);
+                  GameTurns gameTurn = GameTurns(gameId, 2);
                   context.read<GameCubit>().makeMove(1);
-                  signalRService.gamePlay(gameTurn);
+                  signalRService.gamePlay(gameId, 2);
                 }),
             BoardSq(
                 top: false,
                 right: false,
                 symbol: state.board[2],
                 onTap: () {
-                  GameTurns gameTurn=GameTurns( gameId, 3);
+                  GameTurns gameTurn = GameTurns(gameId, 3);
                   context.read<GameCubit>().makeMove(2);
-                  signalRService.gamePlay(gameTurn);
+                  signalRService.gamePlay(gameId, 3);
                 }),
           ],
         ),
@@ -166,17 +162,25 @@ Widget buildBoard(BuildContext context, GameState state,
                             : i == 2
                                 ? 5
                                 : -1);
-                                GameTurns gameTurn=GameTurns( gameId, i == 0
+                    GameTurns gameTurn = GameTurns(
+                        gameId,
+                        i == 0
                             ? 4
                             : i == 1
                                 ? 5
                                 : i == 2
                                     ? 6
                                     : -1);
-                     
+
                     signalRService.gamePlay(
-                       gameTurn,
-                       );
+                      gameId, i == 0
+                            ? 4
+                            : i == 1
+                                ? 5
+                                : i == 2
+                                    ? 6
+                                    : -1
+                    );
                   }),
           ],
         ),
@@ -190,25 +194,25 @@ Widget buildBoard(BuildContext context, GameState state,
                 bottom: false,
                 symbol: state.board[6],
                 onTap: () {
-                  GameTurns gameTurn=GameTurns( gameId, 7);
+                  GameTurns gameTurn = GameTurns(gameId, 7);
                   context.read<GameCubit>().makeMove(6);
-                  signalRService.gamePlay(gameTurn);
+                  signalRService.gamePlay(gameId,7);
                 }),
             BoardSq(
               symbol: state.board[7],
               onTap: () {
-                GameTurns gameTurn=GameTurns( gameId, 8);
+                GameTurns gameTurn = GameTurns(gameId, 8);
                 context.read<GameCubit>().makeMove(7);
-                signalRService.gamePlay(gameTurn);
+                signalRService.gamePlay(gameId,8);
               },
               bottom: false,
             ),
             BoardSq(
               symbol: state.board[8],
               onTap: () {
-                GameTurns gameTurn=GameTurns( gameId, 9);
+                GameTurns gameTurn = GameTurns(gameId, 9);
                 context.read<GameCubit>().makeMove(8);
-                signalRService.gamePlay(gameTurn);
+                signalRService.gamePlay(gameId,9);
               },
               bottom: false,
               right: false,
