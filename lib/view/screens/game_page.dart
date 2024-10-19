@@ -17,17 +17,13 @@ class GamePage extends StatelessWidget {
       this.p1 = 'Player1',
       this.p2 = 'Player2',
       this.avatar1 = kAvatar,
-      this.avatar2 = kAvatar
-      
-      });
+      this.avatar2 = kAvatar});
 
   String p1, p2, avatar1, avatar2, gameId;
 
-  //SignalRService signalRService = SignalRService();
+ 
 
   @override
-  
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,8 +47,8 @@ class GamePage extends StatelessWidget {
               });
             });
           }
-          return buildGameUI(context, state, p1, p2,
-              avatar1, avatar2, signalRServiceGlobal, gameId);
+          return buildGameUI(context, state, p1, p2, avatar1, avatar2,
+              signalRServiceGlobal, gameId);
         },
       ),
     );
@@ -114,7 +110,6 @@ Widget buildBoard(BuildContext context, GameState state,
               top: false,
               symbol: state.board[0],
               onTap: () {
-                GameTurns gameTurn = GameTurns(gameId, 1);
                 context.read<GameCubit>().makeMove(0);
                 signalRService.gamePlay(gameId, 1);
               },
@@ -123,7 +118,6 @@ Widget buildBoard(BuildContext context, GameState state,
                 top: false,
                 symbol: state.board[1],
                 onTap: () {
-                  GameTurns gameTurn = GameTurns(gameId, 2);
                   context.read<GameCubit>().makeMove(1);
                   signalRService.gamePlay(gameId, 2);
                 }),
@@ -132,7 +126,6 @@ Widget buildBoard(BuildContext context, GameState state,
                 right: false,
                 symbol: state.board[2],
                 onTap: () {
-                  GameTurns gameTurn = GameTurns(gameId, 3);
                   context.read<GameCubit>().makeMove(2);
                   signalRService.gamePlay(gameId, 3);
                 }),
@@ -173,14 +166,14 @@ Widget buildBoard(BuildContext context, GameState state,
                                     : -1);
 
                     signalRService.gamePlay(
-                      gameId, i == 0
+                        gameId,
+                        i == 0
                             ? 4
                             : i == 1
                                 ? 5
                                 : i == 2
                                     ? 6
-                                    : -1
-                    );
+                                    : -1);
                   }),
           ],
         ),
@@ -194,25 +187,22 @@ Widget buildBoard(BuildContext context, GameState state,
                 bottom: false,
                 symbol: state.board[6],
                 onTap: () {
-                  GameTurns gameTurn = GameTurns(gameId, 7);
                   context.read<GameCubit>().makeMove(6);
-                  signalRService.gamePlay(gameId,7);
+                  signalRService.gamePlay(gameId, 7);
                 }),
             BoardSq(
               symbol: state.board[7],
               onTap: () {
-                GameTurns gameTurn = GameTurns(gameId, 8);
                 context.read<GameCubit>().makeMove(7);
-                signalRService.gamePlay(gameId,8);
+                signalRService.gamePlay(gameId, 8);
               },
               bottom: false,
             ),
             BoardSq(
               symbol: state.board[8],
               onTap: () {
-                GameTurns gameTurn = GameTurns(gameId, 9);
                 context.read<GameCubit>().makeMove(8);
-                signalRService.gamePlay(gameId,9);
+                signalRService.gamePlay(gameId, 9);
               },
               bottom: false,
               right: false,

@@ -10,9 +10,7 @@ import 'package:xo_game/services/signal_r.dart';
 import 'package:xo_game/view/screens/enter_teams_page.dart';
 import 'package:xo_game/view/screens/game_page.dart';
 
- SignalRService signalRServiceGlobal = SignalRService();
-
-
+SignalRService signalRServiceGlobal = SignalRService();
 
 class OnlineGame extends StatefulWidget {
   const OnlineGame({super.key});
@@ -22,10 +20,11 @@ class OnlineGame extends StatefulWidget {
 }
 
 class _OnlineGameState extends State<OnlineGame> {
-  //final
+  
   Timer? searchTimer;
   bool foundPlayers = false;
 
+  
   @override
   void dispose() {
     //signalRService.dispose();
@@ -36,18 +35,17 @@ class _OnlineGameState extends State<OnlineGame> {
   // Function to search for players in a while loop
   Future<void> searchForPlayers() async {
     searchTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-      if (foundPlayers) { 
+      if (foundPlayers) {
         print('Found players');
-        timer.cancel(); 
+        timer.cancel();
         print('Timer cancelled');
         return;
-         
       }
 
       if (timer.tick >= 12) {
         // After 1 minute (12 * 5 seconds)
         timer.cancel();
-       
+
         _showPlayOfflineDialog(); // Offer to play offline after 1 minute
       } else {
         print('Timer Value: ${timer.tick}');
@@ -74,7 +72,6 @@ class _OnlineGameState extends State<OnlineGame> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
-             
               },
               child: const Text('No'),
             ),
@@ -84,11 +81,9 @@ class _OnlineGameState extends State<OnlineGame> {
     );
 
     if (result == true) {
-      
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => EnterTeamsPage()));
     } else {
-      
       searchForPlayers();
     }
   }
@@ -109,34 +104,39 @@ class _OnlineGameState extends State<OnlineGame> {
                   FadeInLeft(
                     onFinish: (direction) {
                       // Setup SignalR connection and start searching for players
-                      signalRServiceGlobal.setupSignalR(kToken,
-                          onSearchForPlayers: (gameId, player1, player2) async {
-                        final Player p1 = await getPlayerInfo(player1);
-                        final Player p2 = await getPlayerInfo(player2);
+                      signalRServiceGlobal.setupSignalR(
+                        kToken,
+                        onSearchForPlayers: (gameId, player1, player2) async {
+                          final Player p1 = await getPlayerInfo(player1);
+                          final Player p2 = await getPlayerInfo(player2);
 
-                        setState(() {
-                          foundPlayers = true;
-                          searchTimer?.cancel();
-                          signalRServiceGlobal.offSearchForPlayers();
-                           // Mark players as found
-                        });
+                          setState(() {
+                            foundPlayers = true;
+                            searchTimer?.cancel();
+                            signalRServiceGlobal.offSearchForPlayers();
+                            // Mark players as found
+                          });
 
-                         // Stop the search timer when players are found
+                          // Stop the search timer when players are found
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GamePage(
-                              p1: p1.userName!,
-                              p2: p2.userName!,
-                              gameId: gameId,
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GamePage(
+                                p1: p1.userName!,
+                                p2: p2.userName!,
+                                gameId: gameId,
+                              ),
                             ),
-                          ),
-                        );
-                      });
+                          );
+                        },
+                        onGameplay: (winnerId) {
+                          print('Hello from onGameplay from onlineGame page');
+                        },
+                      );
 
                       // Start searching for players in a loop for 1 minute
-                      if(foundPlayers == false) {
+                      if (foundPlayers == false) {
                         searchForPlayers();
                       }
                     },

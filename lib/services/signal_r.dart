@@ -56,8 +56,8 @@ class SignalRService {
     if (hubConnection.state == HubConnectionState.Connected) {
       print('Invoking Gameplay');
       try {
-        await hubConnection.invoke('Gameplay', args: [id,move]);
-        print('Gameplay invoked successfully');
+        await hubConnection.invoke('Gameplay', args: [id, move]);
+        print('Gameplay invoked successfully$move $id');
       } catch (e) {
         print('Error invoking Gameplay: $e');
       }
@@ -88,18 +88,14 @@ class SignalRService {
       print('Error stopping SignalR connection: $error');
     });
   }
+
   void offSearchForPlayers() {
     if (hubConnection.state == HubConnectionState.Connected) {
       hubConnection.off('SearchForPlayers');
       print('Off SearchForPlayers successfully');
     }
   }
-
-
-
 }
-
-
 
 class GameTurns {
   String id;
