@@ -32,7 +32,7 @@ class SignalRService {
     }
 
     hubConnection.on('SearchForPlayers', (parameters) {
-      print('Received onSearchForPlayers: $parameters');
+      print('callback onSearchForPlayers: $parameters');
       if (parameters != null && parameters.length == 3) {
         final gameId = parameters[0] as String;
         final player1 = parameters[1] as int;
