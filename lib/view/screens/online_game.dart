@@ -1,9 +1,11 @@
 import 'dart:async';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/Internet/internet_bloc.dart';
+import 'package:xo_game/models/Player.dart';
 import 'package:xo_game/models/player.dart';
 import 'package:xo_game/services/services.dart';
 import 'package:xo_game/services/signal_r.dart';
@@ -31,27 +33,27 @@ SignalRService signalRServiceGlobal = SignalRService();
 //     super.dispose();
 //   }
 
-//   // Function to search for players in a while loop
-//   // Future<void> searchForPlayers() async {
-//   //   searchTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-//   //     if (foundPlayers) {
-//   //       print('Found players');
-//   //       timer.cancel();
-//   //       print('Timer cancelled');
-//   //       return;
-//   //     }
+//   //Function to search for players in a while loop
+//   Future<void> searchForPlayers() async {
+//     searchTimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+//       if (foundPlayers) {
+//         print('Found players');
+//         timer.cancel();
+//         print('Timer cancelled');
+//         return;
+//       }
 
-//   //     if (timer.tick >= 12) {
-//   //       // After 1 minute (12 * 5 seconds)
-//   //       timer.cancel();
+//       if (timer.tick >= 12) {
+//         // After 1 minute (12 * 5 seconds)
+//         timer.cancel();
 
-//   //       _showPlayOfflineDialog(); // Offer to play offline after 1 minute
-//   //     } else {
-//   //       print('Timer Value: ${timer.tick}');
-//   //       signalRServiceGlobal.searchForPlayers();
-//   //     }
-//   //   });
-//   // }
+//         _showPlayOfflineDialog(); // Offer to play offline after 1 minute
+//       } else {
+//         print('Timer Value: ${timer.tick}');
+//         signalRServiceGlobal.searchForPlayers();
+//       }
+//     });
+//   }
 
 //   // Function to show a dialog offering the user to play offline
 //   Future<void> _showPlayOfflineDialog() async {
@@ -108,8 +110,8 @@ SignalRService signalRServiceGlobal = SignalRService();
 //                         kToken,
 //                         onSearchForPlayers: (gameId, player1, player2) async {
 
-//                           final Player p1 = await getPlayerInfo(player1);
-//                           final Player p2 = await getPlayerInfo(player2);
+//                           final  p1 = await getPlayerInfo(player1);
+//                           final  p2 = await getPlayerInfo(player2);
 
 //                           setState(() {
 //                             foundPlayers = true;
@@ -217,7 +219,8 @@ class _OnlineGameState extends State<OnlineGame> {
                         signalRServiceGlobal.setupSignalR(
                           kToken,
                           onSearchForPlayers: (gameId, player1, player2) async {
-                            print('Hello from onSearchForPlayers from onlineGame page and this parameters: $gameId, $player1, $player2');
+                            print(
+                                'Hello from onSearchForPlayers from onlineGame page and this parameters: [$gameId | $player1 | $player2]');
                             final p1 = await getPlayerInfo(player1);
                             final p2 = await getPlayerInfo(player2);
 

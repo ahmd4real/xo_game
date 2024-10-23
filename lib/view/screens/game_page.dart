@@ -17,13 +17,14 @@ class GamePage extends StatelessWidget {
       this.p1 = 'Player1',
       this.p2 = 'Player2',
       this.avatar1 = kAvatar,
-      this.avatar2 = kAvatar});
+      this.avatar2 = kAvatar,
+      });
 
   String p1, p2, avatar1, avatar2, gameId;
 
- 
+  
+  
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
