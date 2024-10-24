@@ -1,15 +1,11 @@
-import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/Internet/internet_bloc.dart';
-import 'package:xo_game/models/Player.dart';
-import 'package:xo_game/models/player.dart';
 import 'package:xo_game/services/services.dart';
 import 'package:xo_game/services/signal_r.dart';
-import 'package:xo_game/view/screens/enter_teams_page.dart';
 import 'package:xo_game/view/screens/game_page.dart';
 
 SignalRService signalRServiceGlobal = SignalRService();

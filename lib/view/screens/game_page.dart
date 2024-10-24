@@ -10,7 +10,7 @@ import 'package:xo_game/view/screens/online_game.dart';
 import 'package:xo_game/view/widgets/board_sq.dart';
 import 'package:xo_game/view/widgets/user_card.dart';
 
-class GamePage extends StatelessWidget {
+class GamePage extends StatefulWidget {
   GamePage(
       {super.key,
       this.gameId = '',
@@ -22,9 +22,22 @@ class GamePage extends StatelessWidget {
 
   String p1, p2, avatar1, avatar2, gameId;
 
-  
-  
+  @override
+  State<GamePage> createState() => _GamePageState();
+}
 
+class _GamePageState extends State<GamePage> {
+  @override
+  void initState() {
+    super.initState();
+    signalRServiceGlobal.setupSignalR(
+      kToken, 
+      onGameplay: (id,move,winnerId) {
+        print('Hello from onGameplay from onlineGame page');
+        print('Id: $id, Move: $move, WinnerId: $winnerId');
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,22 +47,22 @@ class GamePage extends StatelessWidget {
           if (state.winner != null || state.isDraw) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               String message = state.winner != null
-                  ? '${state.winner == 'X' ? p1 : p2}  wins!'
+                  ? '${state.winner == 'X' ? widget.p1 : widget.p2}  wins!'
                   : 'It\'s a draw!';
-              List<String> players = [p1, p2];
+              // List<String> players = [widget.p1, widget.p2];
 
-              if (!players.contains('Bot')) {
-                players.shuffle();
-                p1 = players[0];
-                p2 = players[1];
-              }
+              // if (!players.contains('Bot')) {
+              //   players.shuffle();
+              //   wp1 = players[0];
+              //   p2 = players[1];
+              // }
               Future.delayed(const Duration(milliseconds: 500), () {
                 showGameEndDialog(context, message);
               });
             });
           }
-          return buildGameUI(context, state, p1, p2, avatar1, avatar2,
-              signalRServiceGlobal, gameId);
+          return buildGameUI(context, state, widget.p1, widget.p2, widget.avatar1, widget.avatar2,
+              signalRServiceGlobal, widget.gameId);
         },
       ),
     );

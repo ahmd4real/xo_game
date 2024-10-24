@@ -5,12 +5,12 @@ import 'package:signalr_netcore/hub_connection_builder.dart';
 class SignalRService {
   late HubConnection hubConnection;
   Function(String gameId, int player1, int player2)? onSearchForPlayers;
-  Function(int winnerId)? onGameplay;
+  Function(int id,int move,int? winnerId)? onGameplay;
 
   Future<void> setupSignalR(
     String token, {
     Function(String gameId, int player1, int player2)? onSearchForPlayers,
-    Function(int winnerId)? onGameplay,
+    Function(int id,int move,int? winnerId)? onGameplay,
   }) async {
     this.onSearchForPlayers = onSearchForPlayers;
     this.onGameplay = onGameplay;
@@ -44,17 +44,20 @@ class SignalRService {
 
     hubConnection.on('Gameplay', (parameters) {
       print('Received Gameplay callback: $parameters');
-      if (parameters != null && parameters.length == 1) {
-        final winnerId = parameters[0] as int;
-
-        onGameplay?.call(winnerId);
+      if (parameters != null && parameters.length == 3) {
+       
+        final id = parameters[0] as int;
+        int move = parameters[1] as int;
+        int? winnerId = parameters[2] as int?;
+        print('Received Gameplay callback after if statement $id $move $winnerId');
+        onGameplay?.call( id, move, winnerId);
       }
     });
   }
 
   Future<void> gamePlay(String id, int move) async {
     if (hubConnection.state == HubConnectionState.Connected) {
-      print('Invoking Gameplay');
+      //print('Invoking Gameplay');
       try {
         await hubConnection.invoke('Gameplay', args: [id, move]);
         print('Gameplay invoked successfully$move $id');
@@ -103,3 +106,4 @@ class GameTurns {
 
   GameTurns(this.id, this.move);
 }
+ 
