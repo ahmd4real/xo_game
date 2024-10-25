@@ -18,6 +18,7 @@ void main() async {
 
   kToken = prefs.getString('jwt') ?? '';
   profilePic = prefs.getString('profilePicture');
+  yourId = prefs.getInt('userId') ?? 0;
   runApp(const Game());
 }
 

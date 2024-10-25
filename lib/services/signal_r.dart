@@ -49,7 +49,7 @@ class SignalRService {
         final id = parameters[0] as int;
         int move = parameters[1] as int;
         int? winnerId = parameters[2] as int?;
-        print('Received Gameplay callback after if statement $id $move $winnerId');
+        print('Received Gameplay callback after if statement id:$id move:$move winnerId:$winnerId');
         onGameplay?.call( id, move, winnerId);
       }
     });
@@ -60,7 +60,7 @@ class SignalRService {
       //print('Invoking Gameplay');
       try {
         await hubConnection.invoke('Gameplay', args: [id, move]);
-        print('Gameplay invoked successfully$move $id');
+        print('Gameplay invoked successfully gameId:$id move:$move');
       } catch (e) {
         print('Error invoking Gameplay: $e');
       }

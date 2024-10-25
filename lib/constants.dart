@@ -41,3 +41,5 @@ const String pressSound='sounds/mixkit-modern-technology-select-3124.wav';
 //Keys
 
 String kToken='';
+int yourId=0;
+int player1Id=yourId, player2Id=yourId; //player 1 is x

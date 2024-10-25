@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:xo_game/models/GameCubit/game_state.dart';
 import 'dart:async';
-
 import 'dart:math';
 import 'package:xo_game/models/bot/min_max.dart';
 
@@ -9,19 +8,16 @@ enum GameMode {
   playerVsPlayer,
   playerVsBotEasy,
   playerVsBotMedium,
-  playerVsBotHard
+  playerVsBotHard,
+  onlineMode
 }
 
 class GameCubit extends Cubit<GameState> {
   final GameMode gameMode;
-  final Minimax minimax=Minimax(botSymbol: 'X'); // Minimax instance
-  Random random = Random();
+  final Minimax minimax = Minimax(botSymbol: 'X');
+  final Random random = Random();
 
-  GameCubit({this.gameMode = GameMode.playerVsBotHard,
-
-  
-  
-  })
+  GameCubit({this.gameMode = GameMode.playerVsBotHard})
       : super(GameState.initial());
 
   /// Player or bot makes a move
@@ -33,17 +29,13 @@ class GameCubit extends Cubit<GameState> {
       final newBoard = List<String>.from(state.board);
       newBoard[index] = state.isXturn ? 'X' : 'O';
 
-      final xMoves =
-          state.isXturn ? List<int>.from(state.xMoves) : state.xMoves;
-      if (state.isXturn) {
-        xMoves.add(index);
-      }
+      final xMoves = state.isXturn
+          ? (List<int>.from(state.xMoves)..add(index))
+          : List<int>.from(state.xMoves);
 
-      final oMoves =
-          !state.isXturn ? List<int>.from(state.oMoves) : state.oMoves;
-      if (!state.isXturn) {
-        oMoves.add(index);
-      }
+      final oMoves = !state.isXturn
+          ? (List<int>.from(state.oMoves)..add(index))
+          : List<int>.from(state.oMoves);
 
       emit(state.copyWith(
         board: newBoard,
@@ -54,15 +46,10 @@ class GameCubit extends Cubit<GameState> {
 
       _checkWinOrDraw(newBoard);
 
-      // If it's a bot game, let the bot make a move after a short delay
-      if (gameMode != GameMode.playerVsPlayer &&
-          !state.isXturn &&
-          state.winner == null &&
-          !state.isDraw) {
-        emit(state.copyWith(isBotTurn: true)); // Set bot's turn
-        Future.delayed(const Duration(milliseconds: 200), () {
-          _botMakeMove();
-        });
+      // Trigger bot move if applicable
+      if (_shouldBotPlay()) {
+        emit(state.copyWith(isBotTurn: true));
+        Future.delayed(const Duration(milliseconds: 200), _botMakeMove);
       }
     }
   }
@@ -70,12 +57,13 @@ class GameCubit extends Cubit<GameState> {
   /// Bot makes its move
   void _botMakeMove() {
     int botMove;
+
     if (gameMode == GameMode.playerVsBotEasy) {
-      botMove = _getRandomMove(); // Easy: Random move
+      botMove = _getRandomMove();
     } else if (gameMode == GameMode.playerVsBotMedium) {
-      botMove = _getMinimaxMove('O'); // Medium: Minimax as 'O'
+      botMove = _getMinimaxMove('O');
     } else {
-      botMove = _getMinimaxMove('X'); // Hard: Minimax as 'X'
+      botMove = _getMinimaxMove('X');
     }
 
     emit(state.copyWith(isBotTurn: false)); // Reset bot's turn
@@ -84,18 +72,16 @@ class GameCubit extends Cubit<GameState> {
 
   /// Get a random available move for the bot (easy difficulty)
   int _getRandomMove() {
-    List<int> availableMoves = [];
-    for (int i = 0; i < state.board.length; i++) {
-      if (state.board[i].isEmpty) {
-        availableMoves.add(i);
-      }
-    }
+    final availableMoves = [
+      for (int i = 0; i < state.board.length; i++)
+        if (state.board[i].isEmpty) i
+    ];
     return availableMoves[random.nextInt(availableMoves.length)];
   }
 
   /// Minimax move calculation for medium and hard difficulties
   int _getMinimaxMove(String botSymbol) {
-    List<List<String>> boardMatrix = [
+    final boardMatrix = [
       [state.board[0], state.board[1], state.board[2]],
       [state.board[3], state.board[4], state.board[5]],
       [state.board[6], state.board[7], state.board[8]]
@@ -109,7 +95,7 @@ class GameCubit extends Cubit<GameState> {
       }
     }
 
-    return _getRandomMove(); // Fallback to random move if minimax fails
+    return _getRandomMove(); // Fallback to random if minimax fails
   }
 
   /// Reset the game state
@@ -134,29 +120,26 @@ class GameCubit extends Cubit<GameState> {
       if (board[combo[0]] == board[combo[1]] &&
           board[combo[1]] == board[combo[2]] &&
           board[combo[0]].isNotEmpty) {
-        _clearNonWinningMoves(combo); // Clear non-winning moves
-        emit(state.copyWith(winner: board[combo[0]], winningCombo: combo));
+        _highlightWinningMoves(combo);
+        emit(state.copyWith(
+          winner: board[combo[0]],
+          winningCombo: combo,
+        ));
 
-        Future.delayed(const Duration(milliseconds: 400), () {
-          resetGame(); // Reset game after short delay
-        });
+        _scheduleReset(); // Delayed reset after win
         return;
       }
     }
 
     if (!board.contains('')) {
       emit(state.copyWith(isDraw: true));
-
-      Future.delayed(const Duration(milliseconds: 200), () {
-        resetGame(); // Reset game after short delay on draw
-      });
+      _scheduleReset(); // Delayed reset after draw
     }
   }
 
-  /// Clear non-winning moves on the board, highlight only winning moves
-  void _clearNonWinningMoves(List<int> winningCombo) {
+  /// Highlight only winning moves on the board
+  void _highlightWinningMoves(List<int> winningCombo) {
     final newBoard = List<String>.filled(9, '');
-
     for (var index in winningCombo) {
       newBoard[index] = state.board[index];
     }
@@ -172,4 +155,21 @@ class GameCubit extends Cubit<GameState> {
       oMoves: newOMoves,
     ));
   }
+
+  /// Schedule a game reset after a short delay
+  void _scheduleReset() {
+    Future.delayed(const Duration(milliseconds: 400), resetGame);
+  }
+
+  /// Determine if the bot should play the next move
+  bool _shouldBotPlay() {
+    return gameMode != GameMode.playerVsPlayer &&
+        gameMode != GameMode.onlineMode &&
+        !state.isXturn &&
+        state.winner == null &&
+        !state.isDraw;
+  }
 }
+
+
+

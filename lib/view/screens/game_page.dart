@@ -10,7 +10,7 @@ import 'package:xo_game/view/screens/online_game.dart';
 import 'package:xo_game/view/widgets/board_sq.dart';
 import 'package:xo_game/view/widgets/user_card.dart';
 
-class GamePage extends StatefulWidget {
+class GamePage extends StatelessWidget {
   GamePage(
       {super.key,
       this.gameId = '',
@@ -18,26 +18,11 @@ class GamePage extends StatefulWidget {
       this.p2 = 'Player2',
       this.avatar1 = kAvatar,
       this.avatar2 = kAvatar,
-      });
+      this.onlineMode = false});
 
   String p1, p2, avatar1, avatar2, gameId;
+  bool onlineMode;
 
-  @override
-  State<GamePage> createState() => _GamePageState();
-}
-
-class _GamePageState extends State<GamePage> {
-  @override
-  void initState() {
-    super.initState();
-    signalRServiceGlobal.setupSignalR(
-      kToken, 
-      onGameplay: (id,move,winnerId) {
-        print('Hello from onGameplay from onlineGame page');
-        print('Id: $id, Move: $move, WinnerId: $winnerId');
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +32,7 @@ class _GamePageState extends State<GamePage> {
           if (state.winner != null || state.isDraw) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               String message = state.winner != null
-                  ? '${state.winner == 'X' ? widget.p1 : widget.p2}  wins!'
+                  ? '${state.winner == 'X' ? p1 : p2}  wins!'
                   : 'It\'s a draw!';
               // List<String> players = [widget.p1, widget.p2];
 
@@ -61,8 +46,8 @@ class _GamePageState extends State<GamePage> {
               });
             });
           }
-          return buildGameUI(context, state, widget.p1, widget.p2, widget.avatar1, widget.avatar2,
-              signalRServiceGlobal, widget.gameId);
+          return buildGameUI(context, state, p1, p2, avatar1, avatar2,
+              signalRServiceGlobal, gameId, onlineMode);
         },
       ),
     );
@@ -77,7 +62,8 @@ Widget buildGameUI(
     String avatar1,
     String avatar2,
     SignalRService signalRService,
-    String gameId) {
+    String gameId,
+    bool onlineMode) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -105,14 +91,14 @@ Widget buildGameUI(
       SizedBox(
         height: MediaQuery.sizeOf(context).height / 8,
       ),
-      buildBoard(context, state, signalRService, gameId),
+      buildBoard(context, state, signalRService, gameId, onlineMode),
       const SizedBox(height: 32),
     ],
   );
 }
 
 Widget buildBoard(BuildContext context, GameState state,
-    SignalRService signalRService, String gameId) {
+    SignalRService signalRService, String gameId, bool onlineMode) {
   return Column(
     children: [
       BounceInUp(
@@ -125,7 +111,9 @@ Widget buildBoard(BuildContext context, GameState state,
               symbol: state.board[0],
               onTap: () {
                 context.read<GameCubit>().makeMove(0);
-                signalRService.gamePlay(gameId, 1);
+                if (onlineMode) {
+                  signalRService.gamePlay(gameId, 1);
+                }
               },
             ),
             BoardSq(
@@ -133,7 +121,10 @@ Widget buildBoard(BuildContext context, GameState state,
                 symbol: state.board[1],
                 onTap: () {
                   context.read<GameCubit>().makeMove(1);
-                  signalRService.gamePlay(gameId, 2);
+
+                  if (onlineMode) {
+                    signalRService.gamePlay(gameId, 2);
+                  }
                 }),
             BoardSq(
                 top: false,
@@ -141,7 +132,9 @@ Widget buildBoard(BuildContext context, GameState state,
                 symbol: state.board[2],
                 onTap: () {
                   context.read<GameCubit>().makeMove(2);
-                  signalRService.gamePlay(gameId, 3);
+                  if (onlineMode) {
+                    signalRService.gamePlay(gameId, 3);
+                  }
                 }),
           ],
         ),
@@ -169,25 +162,18 @@ Widget buildBoard(BuildContext context, GameState state,
                             : i == 2
                                 ? 5
                                 : -1);
-                    GameTurns gameTurn = GameTurns(
-                        gameId,
-                        i == 0
-                            ? 4
-                            : i == 1
-                                ? 5
-                                : i == 2
-                                    ? 6
-                                    : -1);
 
-                    signalRService.gamePlay(
-                        gameId,
-                        i == 0
-                            ? 4
-                            : i == 1
-                                ? 5
-                                : i == 2
-                                    ? 6
-                                    : -1);
+                    if (onlineMode) {
+                      signalRService.gamePlay(
+                          gameId,
+                          i == 0
+                              ? 4
+                              : i == 1
+                                  ? 5
+                                  : i == 2
+                                      ? 6
+                                      : -1);
+                    }
                   }),
           ],
         ),
@@ -202,13 +188,17 @@ Widget buildBoard(BuildContext context, GameState state,
                 symbol: state.board[6],
                 onTap: () {
                   context.read<GameCubit>().makeMove(6);
-                  signalRService.gamePlay(gameId, 7);
+                  if (onlineMode) {
+                    signalRService.gamePlay(gameId, 7);
+                  }
                 }),
             BoardSq(
               symbol: state.board[7],
               onTap: () {
                 context.read<GameCubit>().makeMove(7);
-                signalRService.gamePlay(gameId, 8);
+                if (onlineMode) {
+                  signalRService.gamePlay(gameId, 8);
+                }
               },
               bottom: false,
             ),
@@ -216,7 +206,9 @@ Widget buildBoard(BuildContext context, GameState state,
               symbol: state.board[8],
               onTap: () {
                 context.read<GameCubit>().makeMove(8);
-                signalRService.gamePlay(gameId, 9);
+                if (onlineMode) {
+                  signalRService.gamePlay(gameId, 9);
+                }
               },
               bottom: false,
               right: false,
