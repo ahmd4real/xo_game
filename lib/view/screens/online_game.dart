@@ -75,7 +75,7 @@ class _OnlineGameState extends State<OnlineGame> {
                             });
 
                             // Call the GameCubit to update the board state.
-                            context.read<GameCubit>().makeMove(move - 1);
+                            context.read<GameCubit>().makeMove(move - 1,isRemoteMove: true);
                           },
                         );
                       },

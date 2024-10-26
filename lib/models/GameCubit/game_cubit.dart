@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_state.dart';
 import 'dart:async';
 import 'dart:math';
@@ -21,11 +22,12 @@ class GameCubit extends Cubit<GameState> {
       : super(GameState.initial());
 
   /// Player or bot makes a move
-  void makeMove(int index) {
+
+  void makeMove(int index, {bool isRemoteMove = false}) {
     if (state.board[index].isEmpty &&
         state.winner == null &&
         !state.isDraw &&
-        !state.isBotTurn) {
+        (isRemoteMove || state.isXturn == (player1Id == yourId))) {
       final newBoard = List<String>.from(state.board);
       newBoard[index] = state.isXturn ? 'X' : 'O';
 
@@ -39,7 +41,7 @@ class GameCubit extends Cubit<GameState> {
 
       emit(state.copyWith(
         board: newBoard,
-        isXturn: !state.isXturn,
+        isXturn: !state.isXturn, // Toggle turn after a move
         xMoves: xMoves,
         oMoves: oMoves,
       ));
@@ -170,6 +172,3 @@ class GameCubit extends Cubit<GameState> {
         !state.isDraw;
   }
 }
-
-
-
