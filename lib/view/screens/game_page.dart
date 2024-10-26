@@ -110,6 +110,7 @@ Widget buildBoard(BuildContext context, GameState state,
               top: false,
               symbol: state.board[0],
               onTap: () {
+                
                 context.read<GameCubit>().makeMove(0);
                 if (onlineMode) {
                   signalRService.gamePlay(gameId, 1);
