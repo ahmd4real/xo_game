@@ -36,6 +36,8 @@ class AuthServices {
     prefs.setString('expirationOfJwt', data['expirationOfJwt'] ?? '');
     prefs.setString('userName', data['userName'] ?? '');
     prefs.setInt('userId', data['userId'] ?? 0);
+    yourId = data['userId'] ?? 0;
+    
 
     // Handle profile picture logic based on login scenario
     profilePic = data['profilePicture'] ?? ''; // Update the global profilePic variable

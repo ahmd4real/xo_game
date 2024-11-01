@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/main.dart';
 import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
+import 'package:xo_game/models/player.dart';
+import 'package:xo_game/services/services.dart';
 import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/Auth/login_page.dart';
 import 'package:xo_game/view/screens/enter_teams_page.dart';
@@ -13,11 +16,14 @@ import 'package:xo_game/view/screens/profile_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
 import 'package:xo_game/view/widgets/profile_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
-  String userName = "";
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
   Future<bool> isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
@@ -29,7 +35,7 @@ class HomePage extends StatelessWidget {
     final expirationDate = DateTime.tryParse(expirationString);
     if (expirationDate == null) return false;
 
-    userName = prefs.getString('userName') ?? "";
+    
 
     return DateTime.now().isBefore(expirationDate);
   }
@@ -58,15 +64,14 @@ class HomePage extends StatelessWidget {
             children: [
               BounceInLeft(
                 delay: const Duration(seconds: 1),
-                child: const ProfileCard(
+                child: ProfileCard(
                   image: coin,
-                  title: '+100000',
+                  title: points.toString(),
                   sz: 20,
                   fontSz: 20,
                 ),
               ),
               BounceInLeft(
-                
                 child: IconButton(
                   icon: Container(
                     decoration: BoxDecoration(
@@ -92,7 +97,7 @@ class HomePage extends StatelessWidget {
                               builder: (context) => ProfilePage(
                                     userName: userName,
                                     email: email,
-                      )));
+                                  )));
                     }
                   },
                 ),
@@ -141,7 +146,7 @@ class HomePage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) {
-                                  return  const OnlineGame();
+                                  return const OnlineGame();
                                 }),
                               );
                             } else {

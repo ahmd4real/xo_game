@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/main.dart';
 import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
 import 'package:xo_game/services/services.dart';
 import 'package:xo_game/view/screens/edit_profile_page.dart';
 import 'package:xo_game/view/screens/home_page.dart';
-import 'package:xo_game/view/screens/top_ranked_page.dart';
+import 'package:xo_game/view/screens/top_players_page.dart';
 import 'package:xo_game/view/widgets/profile_card.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -105,8 +106,8 @@ class ProfilePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const ProfileCard(
-                  title: '+1000000',
+                 ProfileCard(
+                  title: '$points',
                   image: coin,
                   sz: 10,
                   
@@ -121,7 +122,7 @@ class ProfilePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TopRankedPage(),
+                        builder: (context) =>  TopRankedPage(),
                       ),
                     );
                   },

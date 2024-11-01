@@ -22,8 +22,46 @@ class GameCubit extends Cubit<GameState> {
       : super(GameState.initial());
 
   /// Player or bot makes a move
+  
+void makeMove(int index) {
+    if (state.board[index].isEmpty &&
+        state.winner == null &&
+        !state.isDraw &&
+        !state.isBotTurn) {
+      final newBoard = List<String>.from(state.board);
+      newBoard[index] = state.isXturn ? 'X' : 'O';
 
-  void makeMove(int index, {bool isRemoteMove = false}) {
+      final xMoves = state.isXturn
+          ? (List<int>.from(state.xMoves)..add(index))
+          : List<int>.from(state.xMoves);
+
+      final oMoves = !state.isXturn
+          ? (List<int>.from(state.oMoves)..add(index))
+          : List<int>.from(state.oMoves);
+
+      emit(state.copyWith(
+        board: newBoard,
+        isXturn: !state.isXturn,
+        xMoves: xMoves,
+        oMoves: oMoves,
+      ));
+
+      _checkWinOrDraw(newBoard);
+
+      // Trigger bot move if applicable
+      if (_shouldBotPlay()) {
+        emit(state.copyWith(isBotTurn: true));
+        Future.delayed(const Duration(milliseconds: 200), _botMakeMove);
+      }
+    }
+  }
+
+
+
+
+  // play online move
+
+  void makeMoveOnline(int index, {bool isRemoteMove = false}) {
     if (state.board[index].isEmpty &&
         state.winner == null &&
         !state.isDraw &&

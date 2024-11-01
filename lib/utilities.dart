@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
+import 'package:xo_game/models/GameCubit/game_state.dart';
 import 'package:xo_game/view/widgets/custom_image_picker.dart';
 
 Widget titleWidget(BuildContext context, {int sz = 8}) {
@@ -59,9 +60,7 @@ void showGameEndDialog(
             child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(
-                  message != 'It\'s a draw!'
-                      ? 'assets/images/win.png'
-                      : 'assets/images/draw.png',
+                  getImagePath(message),
                   width: MediaQuery.sizeOf(context).width / 2,
                   height: MediaQuery.sizeOf(context).width / 2,
                 )),
@@ -97,6 +96,46 @@ void showGameEndDialog(
       );
     },
   );
+}
+
+String getResultMessage(GameState state, bool onlineMode, int yourId,
+    int? receivedWinnerId, String p1, String p2) {
+  if (state.winner != null) {
+    if (onlineMode) {
+
+      // if (receivedWinnerId != null) {
+      //   yourId == receivedWinnerId
+      //     ?'You Won!'
+      //     :'You Lose';
+      // }else {
+        if (p1=='You' && state.winner == 'X') {
+          return 'You Won!';
+        }else if (p2=='You' && state.winner == 'O') {
+          return 'You Won!';
+        }else if (p1=='You' && state.winner == 'O') {
+          return 'You Lose';
+        }else if (p2=='You' && state.winner == 'X') {
+          return 'You Lose';
+        }
+      //}
+        
+      
+      
+    }else{
+      return state.winner == 'X' ? '$p1 wins!' : '$p2 wins!';
+    }
+  }
+  return 'It\'s a Draw!';
+}
+
+String getImagePath(String message) {
+  if (message == 'You Won!' || message.contains('wins!')) {
+    return 'assets/images/win.png';
+  } else if (message == 'You Lose') {
+    return 'assets/images/lose.png';
+  } else {
+    return 'assets/images/draw.png';
+  }
 }
 
 Widget symbolWidget(String symbol, double sz) {

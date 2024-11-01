@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
+import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
 import 'package:xo_game/view/screens/game_page.dart';
 import 'package:xo_game/view/widgets/levels_button.dart';
 
@@ -43,8 +44,10 @@ class LevelsPage extends StatelessWidget {
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotEasy),
                       child:  GamePage(
+                        botMode: true,
                         avatar2: 'assets/images/easy.png',
                         p1: 'You',
+                        avatar1: profilePic??kAvatar,
                         p2: 'Bot',
                       ),
                     ),
@@ -62,6 +65,7 @@ class LevelsPage extends StatelessWidget {
               image: 'assets/images/medium.png',
               color1: kGreen,
               color2: kBlue,
+              
               text: 'Medium',
               onTap: () {
                  Navigator.push(
@@ -71,8 +75,10 @@ class LevelsPage extends StatelessWidget {
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotMedium),
                       child:  GamePage(
+                        botMode: true,
                         avatar2: 'assets/images/medium.png',
                         p1: 'You',
+                        avatar1: profilePic??kAvatar,
                         p2: 'Bot',
                       ),
                     ),
@@ -99,9 +105,12 @@ class LevelsPage extends StatelessWidget {
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotHard),
                       child:  GamePage(
-                        avatar1: 'assets/images/hard.png',
-                        p1: 'Bot',
-                        p2: 'You',
+                        botMode: true,
+                        avatar2: 'assets/images/hard.png',
+                        p1: 'You',
+                        avatar1: profilePic??kAvatar,
+                        p2: 'Bot',
+
                       ),
                     ),
                   ),

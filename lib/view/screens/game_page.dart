@@ -18,10 +18,11 @@ class GamePage extends StatelessWidget {
       this.p2 = 'Player2',
       this.avatar1 = kAvatar,
       this.avatar2 = kAvatar,
-      this.onlineMode = false});
+      this.onlineMode = false,
+      this.botMode = false});
 
   String p1, p2, avatar1, avatar2, gameId;
-  bool onlineMode;
+  bool onlineMode, botMode;
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +32,27 @@ class GamePage extends StatelessWidget {
         builder: (context, state) {
           if (state.winner != null || state.isDraw) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              String message = state.winner != null
-                  ? '${state.winner == 'X' ? p1 : p2}  wins!'
-                  : 'It\'s a draw!';
-              // List<String> players = [widget.p1, widget.p2];
+              String message = getResultMessage(state, onlineMode, yourId, receivedWinnerId, p1, p2);
+              
+              print('Message Result : $message\nOnline Mode: $onlineMode');
+               print("state.winner: ${state.winner}\nstate.isDraw: ${state.isDraw}");
+               print("yourId: $yourId\nreceivedWinnerId: $receivedWinnerId");
+               print("p1: $p1\np2: $p2");
 
-              // if (!players.contains('Bot')) {
-              //   players.shuffle();
-              //   wp1 = players[0];
-              //   p2 = players[1];
-              // }
+              List<String> players = [p1, p2];
+              if (!players.contains('Bot') && !onlineMode) {
+                players.shuffle();
+                p1 = players[0];
+                p2 = players[1];
+              }
               Future.delayed(const Duration(milliseconds: 500), () {
                 showGameEndDialog(context, message);
               });
             });
           }
           return buildGameUI(context, state, p1, p2, avatar1, avatar2,
-              signalRServiceGlobal, gameId, onlineMode);
+              signalRServiceGlobal, gameId,
+              onlineMode: onlineMode, botMode: botMode);
         },
       ),
     );
@@ -63,7 +68,8 @@ Widget buildGameUI(
     String avatar2,
     SignalRService signalRService,
     String gameId,
-    bool onlineMode) {
+    {bool onlineMode = false,
+    bool botMode = false}) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -72,6 +78,8 @@ Widget buildGameUI(
         children: [
           BounceInRight(
             child: UserCard(
+              botMode: botMode,
+              onlineMode: onlineMode,
               avatar: avatar1,
               userName: p1,
               symbol: 'X',
@@ -80,6 +88,8 @@ Widget buildGameUI(
           ),
           BounceInLeft(
             child: UserCard(
+              botMode: botMode,
+              onlineMode: onlineMode,
               avatar: avatar2,
               userName: p2,
               symbol: 'O',
@@ -110,13 +120,16 @@ Widget buildBoard(BuildContext context, GameState state,
               top: false,
               symbol: state.board[0],
               onTap: () {
-                if (state.isXturn == (player1Id == yourId)) {
-                  context.read<GameCubit>().makeMove(0);
+                if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                  context.read<GameCubit>().makeMoveOnline(0);
 
                   if (onlineMode) {
                     signalRService.gamePlay(gameId, 1);
                   }
                 } else {
+                  if (!onlineMode) {
+                    context.read<GameCubit>().makeMove(0);
+                  }
                   print("Not your turn!"); // Optional feedback
                 }
               },
@@ -125,13 +138,16 @@ Widget buildBoard(BuildContext context, GameState state,
                 top: false,
                 symbol: state.board[1],
                 onTap: () {
-                  if (state.isXturn == (player1Id == yourId)) {
-                    context.read<GameCubit>().makeMove(1);
+                  if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                    context.read<GameCubit>().makeMoveOnline(1);
 
                     if (onlineMode) {
                       signalRService.gamePlay(gameId, 1 + 1);
                     }
                   } else {
+                    if (!onlineMode) {
+                      context.read<GameCubit>().makeMove(1);
+                    }
                     print("Not your turn!"); // Optional feedback
                   }
                 }),
@@ -140,14 +156,17 @@ Widget buildBoard(BuildContext context, GameState state,
                 right: false,
                 symbol: state.board[2],
                 onTap: () {
-                  if (state.isXturn == (player1Id == yourId)) {
-                    context.read<GameCubit>().makeMove(2);
+                  if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                    context.read<GameCubit>().makeMoveOnline(2);
 
                     if (onlineMode) {
                       signalRService.gamePlay(gameId, 2 + 1);
                     }
                   } else {
-                    print("Not your turn!"); // Optional feedback
+                    if (!onlineMode) {
+                      context.read<GameCubit>().makeMove(2);
+                    }
+                    //print("Not your turn!"); // Optional feedback
                   }
                 }),
           ],
@@ -169,8 +188,8 @@ Widget buildBoard(BuildContext context, GameState state,
                               ? 5
                               : -1],
                   onTap: () {
-                    if (state.isXturn == (player1Id == yourId)) {
-                      context.read<GameCubit>().makeMove(i == 0
+                    if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                      context.read<GameCubit>().makeMoveOnline(i == 0
                           ? 3
                           : i == 1
                               ? 4
@@ -190,6 +209,16 @@ Widget buildBoard(BuildContext context, GameState state,
                                         : -1);
                       }
                     } else {
+                      if (!onlineMode) {
+                        context.read<GameCubit>().makeMove(i == 0
+                            ? 3
+                            : i == 1
+                                ? 4
+                                : i == 2
+                                    ? 5
+                                    : -1);
+                      }
+
                       print("Not your turn!"); // Optional feedback
                     }
                   }),
@@ -205,43 +234,52 @@ Widget buildBoard(BuildContext context, GameState state,
                 bottom: false,
                 symbol: state.board[6],
                 onTap: () {
-                 if (state.isXturn == (player1Id == yourId)) {
-                    context.read<GameCubit>().makeMove(6);
+                  if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                    context.read<GameCubit>().makeMoveOnline(6);
 
                     if (onlineMode) {
                       signalRService.gamePlay(gameId, 7);
                     }
                   } else {
-                    print("Not your turn!"); // Optional feedback
+                    if (!onlineMode) {
+                      context.read<GameCubit>().makeMove(6);
+                    }
+                    //print("Not your turn!"); // Optional feedback
                   }
                 }),
             BoardSq(
               symbol: state.board[7],
               onTap: () {
-                 if (state.isXturn == (player1Id == yourId)) {
-                    context.read<GameCubit>().makeMove(7);
+                if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                  context.read<GameCubit>().makeMoveOnline(7);
 
-                    if (onlineMode) {
-                      signalRService.gamePlay(gameId, 8);
-                    }
-                  } else {
-                    print("Not your turn!"); // Optional feedback
+                  if (onlineMode) {
+                    signalRService.gamePlay(gameId, 8);
                   }
+                } else {
+                  if (!onlineMode) {
+                    context.read<GameCubit>().makeMove(7);
+                  }
+                  //print("Not your turn!"); // Optional feedback
+                }
               },
               bottom: false,
             ),
             BoardSq(
               symbol: state.board[8],
               onTap: () {
-                if (state.isXturn == (player1Id == yourId)) {
-                    context.read<GameCubit>().makeMove(8);
+                if (state.isXturn == (player1Id == yourId) && onlineMode) {
+                  context.read<GameCubit>().makeMoveOnline(8);
 
-                    if (onlineMode) {
-                      signalRService.gamePlay(gameId, 9);
-                    }
-                  } else {
-                    print("Not your turn!"); // Optional feedback
+                  if (onlineMode) {
+                    signalRService.gamePlay(gameId, 9);
                   }
+                } else {
+                  if (!onlineMode) {
+                    context.read<GameCubit>().makeMove(8);
+                  }
+                  //print("Not your turn!"); // Optional feedback
+                }
               },
               bottom: false,
               right: false,

@@ -8,9 +8,16 @@ import 'package:xo_game/models/Login/login_bloc.dart';
 import 'package:xo_game/models/SignUp/sign_up_bloc.dart';
 import 'package:xo_game/models/Verification/verification_bloc.dart';
 import 'package:xo_game/models/ProfileImageCubit/profile_image_cubit.dart';
+import 'package:xo_game/models/player.dart';
 import 'package:xo_game/services/auth_services.dart';
+import 'package:xo_game/services/services.dart';
 
 import 'package:xo_game/view/screens/home_page.dart';
+
+  String userName = "";
+  int points = 0;
+  int userId = 0;
+  Player user = Player();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +26,11 @@ void main() async {
   kToken = prefs.getString('jwt') ?? '';
   profilePic = prefs.getString('profilePicture');
   yourId = prefs.getInt('userId') ?? 0;
+  userName = prefs.getString('userName') ?? "";
+   
+    user = await getPlayerInfo(yourId);
+
+    points = user.points ?? 0;
   runApp(const Game());
 }
 

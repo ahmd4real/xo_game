@@ -217,3 +217,43 @@ Future<Player> getPlayerInfo(int playerId) async {
   print('Failed to get player info: ${response.statusCode}');
   return Player();
 }
+
+Future<bool> addPoints(int playerId) async {
+  http.Response response = await http.post(
+    Uri.parse('https://xogame.runasp.net/api/Game/AddPoints/$playerId'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $kToken',
+    },
+  );
+  if (response.statusCode == 200) {
+    print('Points added successfully');
+    return true;
+  }
+  print('Failed to add points: ${response.statusCode}');
+  return false;
+}
+
+
+Future<List<Player>> getTopPlayers() async {
+  final response = await http.get(
+    Uri.parse('https://xogame.runasp.net/api/Game/rated-players'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $kToken',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    try {
+      List<dynamic> decodedData = jsonDecode(response.body);
+      return decodedData.map((json) => Player.fromJson(json)).toList();
+    } catch (e) {
+      print('Error parsing top players: $e');
+      return [];
+    }
+  } else {
+    print('Failed to get top players: ${response.statusCode}');
+    return [];
+  }
+}
