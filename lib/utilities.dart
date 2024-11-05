@@ -44,6 +44,7 @@ Widget titleWidget(BuildContext context, {int sz = 8}) {
 void showGameEndDialog(
   BuildContext context,
   String message,
+  bool onlineMode,
 ) {
   showDialog(
     context: context,
@@ -84,8 +85,16 @@ void showGameEndDialog(
             Center(
               child: GestureDetector(
                 onTap: () {
-                  signalRServiceGlobal.dispose();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const OnlineGame()));
+                  if (onlineMode) {
+                    signalRServiceGlobal.dispose();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const OnlineGame()));
+                  }else {
+                    Navigator.pop(context);
+                  }
+
                   context.read<GameCubit>().resetGame();
                 },
                 child: Image.asset('assets/images/play_again.png',
@@ -104,26 +113,22 @@ String getResultMessage(GameState state, bool onlineMode, int yourId,
     int? receivedWinnerId, String p1, String p2) {
   if (state.winner != null) {
     if (onlineMode) {
-
       // if (receivedWinnerId != null) {
       //   yourId == receivedWinnerId
       //     ?'You Won!'
       //     :'You Lose';
       // }else {
-        if (p1=='You' && state.winner == 'X') {
-          return 'You Won!';
-        }else if (p2=='You' && state.winner == 'O') {
-          return 'You Won!';
-        }else if (p1=='You' && state.winner == 'O') {
-          return 'You Lose';
-        }else if (p2=='You' && state.winner == 'X') {
-          return 'You Lose';
-        }
+      if (p1 == 'You' && state.winner == 'X') {
+        return 'You Won!';
+      } else if (p2 == 'You' && state.winner == 'O') {
+        return 'You Won!';
+      } else if (p1 == 'You' && state.winner == 'O') {
+        return 'You Lose';
+      } else if (p2 == 'You' && state.winner == 'X') {
+        return 'You Lose';
+      }
       //}
-        
-      
-      
-    }else{
+    } else {
       return state.winner == 'X' ? '$p1 wins!' : '$p2 wins!';
     }
   }

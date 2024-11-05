@@ -53,7 +53,7 @@ class GamePage extends StatelessWidget {
                 p2 = players[1];
               }
               Future.delayed(const Duration(milliseconds: 500), () {
-                showGameEndDialog(context, message);
+                showGameEndDialog(context, message, onlineMode);
               });
             });
           }

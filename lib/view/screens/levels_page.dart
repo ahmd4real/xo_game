@@ -105,6 +105,7 @@ class LevelsPage extends StatelessWidget {
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotHard),
                       child:  GamePage(
+                        
                         botMode: true,
                         avatar2: 'assets/images/hard.png',
                         p1: 'You',

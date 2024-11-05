@@ -19,6 +19,7 @@ SignalRService signalRServiceGlobal = SignalRService();
 int receivedId = player1Id, receivedMove = -1;
 int? receivedWinnerId;
 
+
 class OnlineGame extends StatefulWidget {
   const OnlineGame({super.key});
 
@@ -177,7 +178,7 @@ class _OnlineGameState extends State<OnlineGame> {
                               receivedId = id;
                               receivedMove = move;
                               receivedWinnerId = winnerId;
-                              points+=10;
+                              
                             });
 
                             // Call the GameCubit to update the board state.
