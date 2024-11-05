@@ -103,32 +103,27 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                 ProfileCard(
-                  title: '$points',
-                  image: coin,
-                  sz: 10,
-                  
-                ),
-                InkWell(
-                  child: const ProfileCard(
-                    title: '23',
-                    image: kass,
-                    sz: 10,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>  TopRankedPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
+            ProfileCard(
+             title: '$points',
+             image: coin,
+             sz: 10,
+             
+                            ),
+                            InkWell(
+             child: const ProfileCard(
+               title: 'Your Rank',
+               image: kass,
+               sz: 10,
+             ),
+             onTap: () {
+               Navigator.push(
+                 context,
+                 MaterialPageRoute(
+                   builder: (context) =>  const TopRankedPage(),
+                 ),
+               );
+             },
+                            ),
           ],
         ),
       ),

@@ -8,6 +8,8 @@ class TopPlayersWidget extends StatelessWidget {
   final int points;
   String? avatar;
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,16 +22,29 @@ class TopPlayersWidget extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 16),
-          CircleAvatar(
-            backgroundImage: avatar == null || avatar!.isEmpty
-                ? const AssetImage(kAvatar)
-                : NetworkImage('https://xogame.runasp.net/$avatar'),
-            radius: 24,
+          Container(
+            
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white54,width: 
+              2)
+            ),
+            child: CircleAvatar(
+              backgroundImage: avatar == null || avatar!.isEmpty
+                  ? const AssetImage(kAvatar)
+                  : NetworkImage('https://xogame.runasp.net/$avatar'),
+              radius: MediaQuery.of(
+                context
+              ).size.width/10,
+            ),
           ),
           const SizedBox(width: 16),
           Text(
             userName,
-            style: const TextStyle(fontFamily: regFont, color: Colors.white),
+            style:  const TextStyle(fontFamily: regFont
+            ,fontSize: 16,
+          
+            color: Colors.white),
           ),
           const Spacer(),
           Text(

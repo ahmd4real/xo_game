@@ -19,8 +19,6 @@ SignalRService signalRServiceGlobal = SignalRService();
 int receivedId = player1Id, receivedMove = -1;
 int? receivedWinnerId;
 
-
-
 class OnlineGame extends StatefulWidget {
   const OnlineGame({super.key});
 
@@ -32,7 +30,7 @@ class _OnlineGameState extends State<OnlineGame> {
   Timer? searchTimer;
   bool showLoading = false;
   bool isTimerRunning = false;
- 
+
   @override
   void dispose() {
     //signalRService.dispose();
@@ -42,7 +40,8 @@ class _OnlineGameState extends State<OnlineGame> {
   }
 
   void startSearchTimer() {
-    if (!isTimerRunning) { // Ensure the timer is started only once
+    if (!isTimerRunning) {
+      // Ensure the timer is started only once
       isTimerRunning = true;
       searchTimer = Timer(const Duration(seconds: 30), () {
         _showNoPlayersDialog(); // Show dialog after 30 seconds
@@ -80,7 +79,6 @@ class _OnlineGameState extends State<OnlineGame> {
                 ),
               ),
               Pulse(
-
                 infinite: true,
                 child: TextButton(
                   onPressed: () {
@@ -144,38 +142,42 @@ class _OnlineGameState extends State<OnlineGame> {
                           onSearchForPlayers: (gameId, player1, player2) async {
                             print(
                                 'Hello from onSearchForPlayers from onlineGame page and this parameters: [$gameId | $player1 | $player2]');
-                            Player p1 = await getPlayerInfo(player1);
-                            Player p2 = await getPlayerInfo(player2);
 
-                            player1Id = player1;
-                            player2Id = player2;
-                            searchTimer?.cancel();
-                            
-                            
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => GamePage(
-                                  onlineMode: true,
-                                  p1: player1 == yourId ? 'You' : p1.userName!,
-                                  p2: player2 == yourId ? 'You' : p2.userName!,
-                                  avatar1: p1.profilePicture ?? '',
-                                  avatar2: p2.profilePicture ?? '',
-                                  gameId: gameId,
-                                ),
-                                
-                              ),
-          
-                            );
-
-                          },
                           
+                              Player p1 = await getPlayerInfo(player1);
+                              Player p2 = await getPlayerInfo(player2);
+
+                              player1Id = player1;
+                              player2Id = player2;
+                              searchTimer?.cancel();
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => GamePage(
+                                    onlineMode: true,
+                                    p1: player1 == yourId
+                                        ? 'You'
+                                        : p1.userName!,
+                                    p2: player2 == yourId
+                                        ? 'You'
+                                        : p2.userName!,
+                                    avatar1: p1.profilePicture ?? '',
+                                    avatar2: p2.profilePicture ?? '',
+                                    gameId: gameId,
+                                  ),
+                                ),
+                              );
+                          
+                          },
                           onGameplay: (id, move, winnerId) {
                             print('Hello from onGameplay from onlineGame page');
+                            {
                             setState(() {
                               receivedId = id;
                               receivedMove = move;
                               receivedWinnerId = winnerId;
+                              points+=10;
                             });
 
                             // Call the GameCubit to update the board state.
@@ -188,11 +190,11 @@ class _OnlineGameState extends State<OnlineGame> {
                                 });
                               });
                             }
-                            context
-                                .read<GameCubit>()
-                                .makeMoveOnline(move - 1, isRemoteMove: true);
-                          },
+                            context.read<GameCubit>().makeMoveOnline(move - 1, isRemoteMove: true);
+                      }},
+                          
                         );
+
                       },
                       delay: const Duration(seconds: 1),
                       child: Image.asset(
@@ -246,6 +248,7 @@ class _OnlineGameState extends State<OnlineGame> {
               ),
             ));
       } else if (state is DisconnectedState) {
+        signalRServiceGlobal.dispose();
         return Scaffold(
           appBar: AppBar(),
           body: BounceInDown(

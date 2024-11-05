@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xo_game/constants.dart';
 import 'package:xo_game/models/GameCubit/game_cubit.dart';
 import 'package:xo_game/models/GameCubit/game_state.dart';
+import 'package:xo_game/view/screens/online_game.dart';
 import 'package:xo_game/view/widgets/custom_image_picker.dart';
 
 Widget titleWidget(BuildContext context, {int sz = 8}) {
@@ -83,7 +84,8 @@ void showGameEndDialog(
             Center(
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop();
+                  signalRServiceGlobal.dispose();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const OnlineGame()));
                   context.read<GameCubit>().resetGame();
                 },
                 child: Image.asset('assets/images/play_again.png',

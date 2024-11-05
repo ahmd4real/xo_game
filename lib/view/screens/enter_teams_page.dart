@@ -43,7 +43,7 @@ class EnterTeamsPage extends StatelessWidget {
                 players.shuffle();
                 p1.text = players[0];
                 p2.text = players[1];
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (contxet) => BlocProvider(

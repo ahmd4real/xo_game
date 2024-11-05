@@ -9,8 +9,6 @@ import 'package:xo_game/models/Login/login_state.dart';
 import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/Auth/enter_email.dart';
 import 'package:xo_game/view/screens/Auth/signup_page.dart';
-
-
 import 'package:xo_game/view/widgets/custom_button.dart';
 import 'package:xo_game/view/widgets/custom_form_field.dart';
 
@@ -31,12 +29,12 @@ class LoginPage extends StatelessWidget {
           Navigator.pop(context);
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
                 backgroundColor: Colors.green,
                 content: Center(
                     child: Text(
-                  state.error,
-                  style: const TextStyle(color: Colors.white, fontFamily: font),
+                  'Email or Password is incorrect',
+                  style: TextStyle(color: Colors.white, fontFamily: font),
                 ))),
           );
         }

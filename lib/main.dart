@@ -66,7 +66,7 @@ class Game extends StatelessWidget {
             scaffoldBackgroundColor: background,
             appBarTheme: AppBarTheme(
               backgroundColor: background,
-              iconTheme: const IconThemeData(color: Colors.amber),
+              iconTheme: const IconThemeData(color: Color(0xFFFFC107)),
             ),
           ),
           debugShowCheckedModeBanner: false,

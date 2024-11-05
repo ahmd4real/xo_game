@@ -27,17 +27,24 @@ class GamePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () =>
+                Navigator.popUntil(context, (route) => route.isFirst),
+            icon: const Icon(Icons.arrow_back)),
+      ),
       body: BlocBuilder<GameCubit, GameState>(
         builder: (context, state) {
           if (state.winner != null || state.isDraw) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              String message = getResultMessage(state, onlineMode, yourId, receivedWinnerId, p1, p2);
-              
+              String message = getResultMessage(
+                  state, onlineMode, yourId, receivedWinnerId, p1, p2);
+
               print('Message Result : $message\nOnline Mode: $onlineMode');
-               print("state.winner: ${state.winner}\nstate.isDraw: ${state.isDraw}");
-               print("yourId: $yourId\nreceivedWinnerId: $receivedWinnerId");
-               print("p1: $p1\np2: $p2");
+              print(
+                  "state.winner: ${state.winner}\nstate.isDraw: ${state.isDraw}");
+              print("yourId: $yourId\nreceivedWinnerId: $receivedWinnerId");
+              print("p1: $p1\np2: $p2");
 
               List<String> players = [p1, p2];
               if (!players.contains('Bot') && !onlineMode) {
@@ -50,6 +57,7 @@ class GamePage extends StatelessWidget {
               });
             });
           }
+          
           return buildGameUI(context, state, p1, p2, avatar1, avatar2,
               signalRServiceGlobal, gameId,
               onlineMode: onlineMode, botMode: botMode);
