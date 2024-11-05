@@ -37,6 +37,12 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+    
 }
 
 flutter {
