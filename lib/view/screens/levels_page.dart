@@ -43,11 +43,11 @@ class LevelsPage extends StatelessWidget {
                     builder: (context) => BlocProvider(
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotEasy),
-                      child:  GamePage(
+                      child: GamePage(
                         botMode: true,
                         avatar2: 'assets/images/easy.png',
                         p1: 'You',
-                        avatar1: profilePic??kAvatar,
+                        avatar1: profilePic ?? kAvatar,
                         p2: 'Bot',
                       ),
                     ),
@@ -65,20 +65,19 @@ class LevelsPage extends StatelessWidget {
               image: 'assets/images/medium.png',
               color1: kGreen,
               color2: kBlue,
-              
               text: 'Medium',
               onTap: () {
-                 Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotMedium),
-                      child:  GamePage(
+                      child: GamePage(
                         botMode: true,
                         avatar2: 'assets/images/medium.png',
                         p1: 'You',
-                        avatar1: profilePic??kAvatar,
+                        avatar1: profilePic ?? kAvatar,
                         p2: 'Bot',
                       ),
                     ),
@@ -98,20 +97,18 @@ class LevelsPage extends StatelessWidget {
               color2: kPink,
               text: 'Hard',
               onTap: () {
-                 Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => BlocProvider(
                       create: (context) =>
                           GameCubit(gameMode: GameMode.playerVsBotHard),
-                      child:  GamePage(
-                        
+                      child: GamePage(
                         botMode: true,
                         avatar2: 'assets/images/hard.png',
                         p1: 'You',
-                        avatar1: profilePic??kAvatar,
+                        avatar1: profilePic ?? kAvatar,
                         p2: 'Bot',
-
                       ),
                     ),
                   ),

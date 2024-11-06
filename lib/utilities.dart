@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -87,11 +88,15 @@ void showGameEndDialog(
                 onTap: () {
                   if (onlineMode) {
                     signalRServiceGlobal.dispose();
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                     Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const OnlineGame()));
-                  }else {
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const OnlineGame()),
+                      // This condition removes all previous routes from the stack
+                    );
+                  } else {
                     Navigator.pop(context);
                   }
 
@@ -222,6 +227,7 @@ showImagePicker(BuildContext context, Function(Image) setImage) async {
     }
   } else {
     showModalBottomSheet(
+      backgroundColor: Colors.transparent,
       context: context,
       builder: (builder) {
         return CustomButtomSheet_imgPick(setImage: setImage);

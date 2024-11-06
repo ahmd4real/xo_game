@@ -11,34 +11,33 @@ class CustomButtomSheet_imgPick extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: kDarkPurple,
-      child: Container(
-        decoration: BoxDecoration(
-         color:  kDarkPurple
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height / 5.2,
-        margin: const EdgeInsets.only(top: 8.0),
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            BottomSheetBuilderIcon(
-              source: ImageSource.camera,
-              icon: Icons.photo_camera_rounded,
-              text: 'camera',
-              
-              setImage: setImage,
-            ),
-            BottomSheetBuilderIcon(
-              source: ImageSource.gallery,
-              icon: Icons.image_outlined,
-              text: 'gallery',
-              setImage: setImage,
-            ),
-          ],
-        ),
+    return Container(
+      
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+       color:  kDarkPurple
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height / 5.2,
+      margin: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          BottomSheetBuilderIcon(
+            source: ImageSource.camera,
+            icon: Icons.photo_camera_rounded,
+            text: 'camera',
+            
+            setImage: setImage,
+          ),
+          BottomSheetBuilderIcon(
+            source: ImageSource.gallery,
+            icon: Icons.image_outlined,
+            text: 'gallery',
+            setImage: setImage,
+          ),
+        ],
       ),
     );
   }
@@ -67,14 +66,14 @@ class BottomSheetBuilderIcon extends StatelessWidget {
             Container(
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Color(0xFFB3EABF),
+                color: Colors.white24,
               ),
               height: 75,
               width: 75,
               child: Icon(
                 icon,
                 size: 35.0,
-                color: Colors.green,
+                color: kGreen,
               ),
             ),
             const SizedBox(height: 12.0),

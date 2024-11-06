@@ -33,6 +33,7 @@ class ProfilePage extends StatelessWidget {
                 onPressed: () async {
                   bool loggedOut = await signOut(context);
                   if (loggedOut) {
+                    points = 0;
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => HomePage()),
@@ -82,12 +83,11 @@ class ProfilePage extends StatelessWidget {
                   children: [
                     Text(
                       userName,
-                      style:  const TextStyle(
-                        color: Colors.amber,
-                        fontSize: 24,
-                        fontFamily: regFont,
-                        fontWeight: FontWeight.bold
-                      ),
+                      style: const TextStyle(
+                          color: Colors.amber,
+                          fontSize: 24,
+                          fontFamily: regFont,
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -104,26 +104,25 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             ProfileCard(
-             title: '$points',
-             image: coin,
-             sz: 10,
-             
-                            ),
-                            InkWell(
-             child: const ProfileCard(
-               title: 'Your Rank',
-               image: kass,
-               sz: 10,
-             ),
-             onTap: () {
-               Navigator.push(
-                 context,
-                 MaterialPageRoute(
-                   builder: (context) =>  const TopRankedPage(),
-                 ),
-               );
-             },
-                            ),
+              title: '$points',
+              image: coin,
+              sz: 10,
+            ),
+            InkWell(
+              child: const ProfileCard(
+                title: 'Your Rank',
+                image: kass,
+                sz: 10,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const TopRankedPage(),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),

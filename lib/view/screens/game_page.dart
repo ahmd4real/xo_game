@@ -29,8 +29,15 @@ class GamePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            onPressed: () =>
-                Navigator.popUntil(context, (route) => route.isFirst),
+            onPressed: () {
+              
+               Navigator.popUntil(context, (route) => route.isFirst);
+                if (onlineMode){
+                 GameCubit gameCubit = context.read<GameCubit>();
+                 gameCubit.resetGame();
+                }
+                
+                },
             icon: const Icon(Icons.arrow_back)),
       ),
       body: BlocBuilder<GameCubit, GameState>(
@@ -57,7 +64,7 @@ class GamePage extends StatelessWidget {
               });
             });
           }
-          
+
           return buildGameUI(context, state, p1, p2, avatar1, avatar2,
               signalRServiceGlobal, gameId,
               onlineMode: onlineMode, botMode: botMode);
@@ -138,7 +145,7 @@ Widget buildBoard(BuildContext context, GameState state,
                   if (!onlineMode) {
                     context.read<GameCubit>().makeMove(0);
                   }
-                  print("Not your turn!"); // Optional feedback
+                  // Optional feedback
                 }
               },
             ),
@@ -156,7 +163,7 @@ Widget buildBoard(BuildContext context, GameState state,
                     if (!onlineMode) {
                       context.read<GameCubit>().makeMove(1);
                     }
-                    print("Not your turn!"); // Optional feedback
+                    // Optional feedback
                   }
                 }),
             BoardSq(
@@ -174,7 +181,7 @@ Widget buildBoard(BuildContext context, GameState state,
                     if (!onlineMode) {
                       context.read<GameCubit>().makeMove(2);
                     }
-                    //print("Not your turn!"); // Optional feedback
+                    // Optional feedback
                   }
                 }),
           ],
@@ -227,7 +234,7 @@ Widget buildBoard(BuildContext context, GameState state,
                                     : -1);
                       }
 
-                      print("Not your turn!"); // Optional feedback
+                      // Optional feedback
                     }
                   }),
           ],
@@ -252,7 +259,7 @@ Widget buildBoard(BuildContext context, GameState state,
                     if (!onlineMode) {
                       context.read<GameCubit>().makeMove(6);
                     }
-                    //print("Not your turn!"); // Optional feedback
+                    // Optional feedback
                   }
                 }),
             BoardSq(
@@ -268,7 +275,7 @@ Widget buildBoard(BuildContext context, GameState state,
                   if (!onlineMode) {
                     context.read<GameCubit>().makeMove(7);
                   }
-                  //print("Not your turn!"); // Optional feedback
+                  // Optional feedback
                 }
               },
               bottom: false,
@@ -286,7 +293,7 @@ Widget buildBoard(BuildContext context, GameState state,
                   if (!onlineMode) {
                     context.read<GameCubit>().makeMove(8);
                   }
-                  //print("Not your turn!"); // Optional feedback
+                  // Optional feedback
                 }
               },
               bottom: false,
@@ -298,3 +305,4 @@ Widget buildBoard(BuildContext context, GameState state,
     ],
   );
 }
+

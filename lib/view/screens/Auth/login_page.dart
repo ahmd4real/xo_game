@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:xo_game/constants.dart';
+import 'package:xo_game/main.dart';
 import 'package:xo_game/models/Login/login_bloc.dart';
 import 'package:xo_game/models/Login/login_event.dart';
 import 'package:xo_game/models/Login/login_state.dart';
+import 'package:xo_game/models/player.dart';
+import 'package:xo_game/services/services.dart';
 import 'package:xo_game/utilities.dart';
 import 'package:xo_game/view/screens/Auth/enter_email.dart';
 import 'package:xo_game/view/screens/Auth/signup_page.dart';
+import 'package:xo_game/view/screens/home_page.dart';
 import 'package:xo_game/view/widgets/custom_button.dart';
 import 'package:xo_game/view/widgets/custom_form_field.dart';
 
@@ -20,13 +24,20 @@ class LoginPage extends StatelessWidget {
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey();
 
+  void loadPoints() async {
+    Player player = await getPlayerInfoWithOutId();
+    points = player.points??0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthLoading) {
         } else if (state is AuthSuccess) {
-          Navigator.pop(context);
+          loadPoints();
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage())); 
+          
         } else if (state is AuthFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -106,8 +117,7 @@ class LoginPage extends StatelessWidget {
                       color2: kPurple,
                       text: 'Login',
                       onTap: () {
-                        print(
-                            '${emailController.text}  ${passwordController.text}');
+                       
                         if (formKey.currentState!.validate()) {
                           context.read<AuthBloc>().add(LoginEvent(
                               emailController.text,

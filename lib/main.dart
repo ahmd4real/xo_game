@@ -41,6 +41,10 @@ class Game extends StatelessWidget {
   Widget build(BuildContext context) {
     final authServices = AuthServices(baseUrl: baseUrl);
     return MultiBlocProvider(
+
+
+
+
       providers: [
         BlocProvider(
             create: (context) => GameCubit(gameMode: GameMode.playerVsPlayer)),
@@ -62,6 +66,7 @@ class Game extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        
           theme: ThemeData(
             scaffoldBackgroundColor: background,
             appBarTheme: AppBarTheme(

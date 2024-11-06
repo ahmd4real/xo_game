@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                 delay: const Duration(seconds: 1),
                 child: ProfileCard(
                   image: coin,
-                  title: points.toString(),
+                  title: '$points',
                   sz: 20,
                   fontSz: 20,
                 ),

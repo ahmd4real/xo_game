@@ -82,7 +82,7 @@ Future<bool> signOut(BuildContext context) async {
   );
 
   if (response.statusCode == 200) {
-    print('Successfully signed out');
+    
 
     // Retrieve profilePic before clearing preferences
     final profilePicFromStorage = await getData('profilePic');
@@ -139,7 +139,7 @@ Future<int?> updateUserData({
   if (updateUserName) {
     updateData.add({
       "operationType": 0,
-      "path": "firstName",
+      "path": "userName",
       "op": "replace",
       "from": "string",
       "value": newuserName
@@ -218,6 +218,21 @@ Future<Player> getPlayerInfo(int playerId) async {
   return Player();
 }
 
+Future<Player> getPlayerInfoWithOutId() async {
+  http.Response response = await http.get(
+    Uri.parse('https://xogame.runasp.net/api/Profile'),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $kToken',
+    },
+  );
+  if (response.statusCode == 200) {
+    return Player.fromJson(jsonDecode(response.body));
+  }
+  print('Failed to get player info: ${response.statusCode}');
+  return Player();
+}
+
 Future<bool> addPoints(int playerId) async {
   http.Response response = await http.post(
     Uri.parse('https://xogame.runasp.net/api/Game/AddPoints/$playerId'),
@@ -233,7 +248,6 @@ Future<bool> addPoints(int playerId) async {
   print('Failed to add points: ${response.statusCode}');
   return false;
 }
-
 
 Future<List<Player>> getTopPlayers() async {
   final response = await http.get(
